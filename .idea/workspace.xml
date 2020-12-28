@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ce8acec2-e741-4a1a-a93d-fcbd02bce875" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/bar.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/bin/simple_game.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game.rs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bin/draw_bar.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/bin/draw_bar.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/bin/draw_bar.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/bin/generate_conf.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/bin/generate_conf.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/bin/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,8 +50,11 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Dean\rust\bricktest\resources" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Dean\rust\bricktest\src" />
+    </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Cargo.simple game">
     <configuration name="draw_bar" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="command" value="run --bin draw_bar" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -62,6 +69,24 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
+    <configuration name="simple game" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="command" value="run --bin simple_game" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <option name="channel" value="DEFAULT" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <envs />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Cargo.draw_bar" />
+      <item itemvalue="Cargo.simple game" />
+    </list>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
@@ -83,7 +108,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609114443808</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="stuff">
+      <created>1609115847468</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1609115847468</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -91,6 +123,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
+    <MESSAGE value="stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="stuff" />
   </component>
 </project>
