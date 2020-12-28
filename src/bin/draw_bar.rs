@@ -1,8 +1,10 @@
 use ggez::{Context, ContextBuilder, event, GameResult, graphics};
-use ggez::nalgebra as na;
+
+
+use bricktest::bar;
 
 struct State {
-    bar_texture: graphics::Image,
+    bar: bar::Bar,
 }
 
 impl ggez::event::EventHandler for State {
@@ -12,11 +14,7 @@ impl ggez::event::EventHandler for State {
 
     fn draw(&mut self, _ctx: &mut Context) -> GameResult {
         graphics::clear(_ctx, graphics::BLACK);
-        graphics::draw(_ctx, &self.bar_texture,
-                       graphics::DrawParam::default()
-                           .dest(na::Point2::new(0.0, 0.0))
-                           .scale(na::Vector2::new(1.0, 1.0)),
-        )?;
+        self.bar.draw(_ctx)?;
         graphics::present(_ctx)?;
         Ok(())
     }
@@ -36,8 +34,8 @@ fn main() {
         .build()
         .unwrap();
 
-    let bar_texture = graphics::Image::new(_ctx, "/bar.png").unwrap();
-    let state = &mut State { bar_texture };
+    let bar = bar::Bar::new(_ctx);
+    let state = &mut State { bar };
 
     event::run(_ctx, event_loop, state).unwrap();
 }
