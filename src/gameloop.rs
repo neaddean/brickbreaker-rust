@@ -42,8 +42,8 @@ pub fn run(
                         input:
                         KeyboardInput {
                             state: ElementState::Released,
-                            virtual_keycode: Some(keycode),
-                            modifiers,
+                            virtual_keycode: Some(_keycode),
+                            // _,
                             ..
                         },
                         ..

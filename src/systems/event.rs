@@ -20,8 +20,8 @@ impl<'a> System<'a> for EventSystem {
             println!("New event: {:?}", event);
 
             match event {
-                Event::KeyDown(KeyCode, KeyMods, is_repeated) => {
-                    match KeyCode {
+                Event::KeyDown(key_code, _key_mods, _is_repeated) => {
+                    match key_code {
                         KeyCode::Up => {
                             for vel in (&mut velocities).join() {
                                 vel.x += 2.0;
