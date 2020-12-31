@@ -9,7 +9,8 @@ pub struct RenderingSystem<'a> {
 }
 
 impl<'a> System<'a> for RenderingSystem<'a> {
-    type SystemData = (ReadStorage<'a, Position>, ReadStorage<'a, Renderable>);
+    type SystemData = (ReadStorage<'a, Position>,
+                       ReadStorage<'a, Renderable>);
 
     fn run(&mut self, data: Self::SystemData) {
         graphics::clear(self.ctx, graphics::Color::new(0.0, 0.0, 0.0, 1.0));

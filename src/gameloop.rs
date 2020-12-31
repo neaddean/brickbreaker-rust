@@ -1,13 +1,8 @@
 use ggez::event::winit_event::*;
 use ggez::Context;
 use winit::EventsLoop;
+use specs::RunNow;
 
-// use winit::{
-//     DeviceEvent, ElementState, Event, KeyboardInput, ModifiersState, MouseScrollDelta,
-//     TouchPhase, WindowEvent,
-// };
-
-// use winit::{self, dpi, EventsLoop, MouseButton};
 
 pub fn run(
     ctx: &mut Context,
@@ -36,7 +31,6 @@ pub fn run(
             }
         });
         dispatcher.dispatch(world);
-        use specs::RunNow;
         {
             let mut rs = crate::systems::RenderingSystem { ctx };
             rs.run_now(world);
