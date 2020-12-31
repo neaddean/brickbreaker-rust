@@ -1,9 +1,6 @@
+use ggez::{Context, graphics};
 use ggez::nalgebra as na;
-use ggez::{graphics, Context};
-use specs::{
-    join::Join, Builder, Component, Dispatcher, DispatcherBuilder, ReadStorage, RunNow, System,
-    VecStorage, World, WorldExt, WriteStorage,
-};
+use specs::{join::Join, ReadStorage, System};
 
 use crate::components::*;
 

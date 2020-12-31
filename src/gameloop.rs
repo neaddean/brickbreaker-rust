@@ -1,7 +1,5 @@
-use ggez::error::GameResult;
-use ggez::event::winit_event::*;
 use ggez::Context;
-
+use ggez::event::winit_event::*;
 use winit::EventsLoop;
 
 // use winit::{
@@ -15,8 +13,7 @@ pub fn run(
     ctx: &mut Context,
     events_loop: &mut EventsLoop,
     dispatcher: &mut specs::Dispatcher,
-    world: &mut specs::World,
-) -> GameResult {
+    world: &mut specs::World) {
     // use ggwz::input::{keyboard, mouse};
 
     while ctx.continuing {
@@ -40,10 +37,8 @@ pub fn run(
         dispatcher.dispatch(world);
         use specs::RunNow;
         {
-            let mut rs = crate::systems::RenderingSystem {ctx};
+            let mut rs = crate::systems::RenderingSystem { ctx };
             rs.run_now(world);
         }
     }
-
-    Ok(())
 }

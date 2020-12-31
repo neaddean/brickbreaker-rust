@@ -1,9 +1,5 @@
-use ggez::{graphics, Context};
-
-use specs::{
-    join::Join, Builder, Component, Dispatcher, DispatcherBuilder, ReadStorage, RunNow, System,
-    VecStorage, World, WorldExt, WriteStorage,
-};
+use ggez::{Context, graphics};
+use specs::{Component, VecStorage};
 
 #[derive(Component)]
 #[storage(VecStorage)]

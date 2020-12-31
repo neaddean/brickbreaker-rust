@@ -4,12 +4,15 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce8acec2-e741-4a1a-a93d-fcbd02bce875" name="Default Changelist" comment="">
+    <list default="true" id="ce8acec2-e741-4a1a-a93d-fcbd02bce875" name="Default Changelist" comment="restructure">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/loop.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/gameloop.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/bin/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/bin/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/components.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gameloop.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/gameloop.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/systems/physics.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/systems/physics.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/systems/render.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/systems/render.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +126,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609382223910</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="restructure">
+      <created>1609384689887</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1609384689887</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

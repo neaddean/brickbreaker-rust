@@ -1,35 +1,10 @@
-use ggez::{ContextBuilder};
-use specs::{
-    Builder, Dispatcher, DispatcherBuilder, join::Join, ReadStorage, RunNow, System,
-    VecStorage, World, WorldExt, WriteStorage,
-};
+use ggez::ContextBuilder;
+use specs::{DispatcherBuilder, World, WorldExt};
 
 use bricktest::{
     components, entities,
-    systems::{PhysicsSystem, RenderingSystem},
+    systems::PhysicsSystem,
 };
-
-// struct Game {
-//     world: specs::World,
-// }
-//
-// impl ggez::event::EventHandler for Game {
-//     fn update(&mut self, _ctx: &mut Context) -> GameResult {
-//         {
-//             let mut ps = PhysicsSystem;
-//             ps.run_now(&self.world);
-//         }
-//         Ok(())
-//     }
-//
-//     fn draw(&mut self, ctx: &mut Context) -> GameResult {
-//         {
-//             let mut rs = RenderingSystem { ctx };
-//             rs.run_now(&self.world);
-//         }
-//         Ok(())
-//     }
-// }
 
 fn main() {
     let resource_dir = if let Ok(manifest_dir) = std::env::var("CARGO_MANIFEST_DIR") {

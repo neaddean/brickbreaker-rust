@@ -1,9 +1,6 @@
 use ggez::Context;
 
-use specs::{
-    join::Join, Builder, Component, Dispatcher, DispatcherBuilder, ReadStorage, RunNow, System,
-    VecStorage, World, WorldExt, WriteStorage,
-};
+use specs::{Builder, World, WorldExt};
 
 use crate::components::*;
 
