@@ -1,4 +1,4 @@
-use specs::{    join::Join, System, WriteStorage};
+use specs::{join::Join, System, WriteStorage};
 
 use crate::components::*;
 

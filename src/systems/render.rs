@@ -1,5 +1,5 @@
-use ggez::{Context, graphics};
 use ggez::nalgebra as na;
+use ggez::{graphics, Context};
 use specs::{join::Join, ReadStorage, System};
 
 use crate::components::*;

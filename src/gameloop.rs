@@ -1,5 +1,5 @@
-use ggez::Context;
 use ggez::event::winit_event::*;
+use ggez::Context;
 use winit::EventsLoop;
 
 // use winit::{
@@ -13,7 +13,8 @@ pub fn run(
     ctx: &mut Context,
     events_loop: &mut EventsLoop,
     dispatcher: &mut specs::Dispatcher,
-    world: &mut specs::World) {
+    world: &mut specs::World,
+) {
     // use ggwz::input::{keyboard, mouse};
 
     while ctx.continuing {

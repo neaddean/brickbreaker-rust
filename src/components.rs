@@ -1,4 +1,4 @@
-use ggez::{Context, graphics};
+use ggez::{graphics, Context};
 use specs::{Component, VecStorage};
 
 #[derive(Component)]

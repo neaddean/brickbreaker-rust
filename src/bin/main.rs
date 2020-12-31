@@ -1,10 +1,7 @@
 use ggez::ContextBuilder;
 use specs::{DispatcherBuilder, World, WorldExt};
 
-use bricktest::{
-    components, entities,
-    systems::PhysicsSystem,
-};
+use bricktest::{components, entities, systems::PhysicsSystem};
 
 fn main() {
     let resource_dir = if let Ok(manifest_dir) = std::env::var("CARGO_MANIFEST_DIR") {
@@ -37,6 +34,4 @@ fn main() {
     dispatcher.setup(world);
 
     bricktest::gameloop::run(ctx, event_loop, dispatcher, world);
-
-    // event::run(ctx, event_loop, game).unwrap();
 }
