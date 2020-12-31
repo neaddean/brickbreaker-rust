@@ -1,12 +1,15 @@
-use ggez::{ContextBuilder, event};
-use ggez::{Context, GameResult, graphics};
-use ggez::nalgebra as na;
+use ggez::{event, ContextBuilder};
+use ggez::{Context, GameResult};
+
 use specs::{
-    Builder, Component, Dispatcher, DispatcherBuilder, join::Join, ReadStorage, RunNow, System,
+    join::Join, Builder, Component, Dispatcher, DispatcherBuilder, ReadStorage, RunNow, System,
     VecStorage, World, WorldExt, WriteStorage,
 };
 
-use bricktest::{systems::{PhysicsSystem, RenderingSystem}, entities, components};
+use bricktest::{
+    components, entities,
+    systems::{PhysicsSystem, RenderingSystem},
+};
 
 struct Game {
     world: specs::World,

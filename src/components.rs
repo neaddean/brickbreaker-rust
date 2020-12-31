@@ -1,16 +1,14 @@
-use ggez::{ContextBuilder, event};
-use ggez::{Context, GameResult, graphics};
-use ggez::nalgebra as na;
+use ggez::{graphics, Context};
+
 use specs::{
-    Builder, Component, Dispatcher, DispatcherBuilder, join::Join, ReadStorage, RunNow, System,
+    join::Join, Builder, Component, Dispatcher, DispatcherBuilder, ReadStorage, RunNow, System,
     VecStorage, World, WorldExt, WriteStorage,
 };
-
 
 #[derive(Component)]
 #[storage(VecStorage)]
 pub struct Renderable {
-    pub  texture: graphics::Image,
+    pub texture: graphics::Image,
 }
 
 impl Renderable {
@@ -34,4 +32,3 @@ pub struct Velocity {
     pub x: f32,
     pub y: f32,
 }
-

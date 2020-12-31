@@ -9,3 +9,4 @@ default-run = "main"
 ggez = "0.5.1"
 rand = "0.8.0"
 specs = { version = "0.16.1", features = ["specs-derive"] }
+winit = { version = "0.19.3" }

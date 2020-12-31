@@ -5,20 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ce8acec2-e741-4a1a-a93d-fcbd02bce875" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/bin/main.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/entities.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/loop.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/systems/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/systems/physics.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/systems/render.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bin/bouncing_ball.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bin/simple_game.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game.rs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loop.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/gameloop.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,21 +58,7 @@
       <recent name="C:\Users\Dean\rust\bricktest\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.main">
-    <configuration name="draw_bar" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
-      <option name="command" value="run --bin draw_bar" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <option name="channel" value="DEFAULT" />
-      <option name="allFeatures" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="SHORT" />
-      <envs />
-      <option name="isRedirectInput" value="false" />
-      <option name="redirectInputPath" value="" />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration name="main" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="command" value="run " />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -96,25 +73,6 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="simple game" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
-      <option name="command" value="run --bin simple_game" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <option name="channel" value="DEFAULT" />
-      <option name="allFeatures" value="false" />
-      <option name="emulateTerminal" value="false" />
-      <option name="backtrace" value="SHORT" />
-      <envs />
-      <option name="isRedirectInput" value="false" />
-      <option name="redirectInputPath" value="" />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-    <list>
-      <item itemvalue="Cargo.main" />
-      <item itemvalue="Cargo.draw_bar" />
-      <item itemvalue="Cargo.simple game" />
-    </list>
   </component>
   <component name="RustProjectSettings">
     <option name="newResolveEnabled" value="true" />
@@ -158,13 +116,21 @@
       <option name="project" value="LOCAL" />
       <updated>1609379192953</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="restructure">
+      <created>1609382223910</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1609382223910</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
     <MESSAGE value="stuff" />
     <MESSAGE value="move to ecs" />
-    <option name="LAST_COMMIT_MESSAGE" value="move to ecs" />
+    <MESSAGE value="restructure" />
+    <option name="LAST_COMMIT_MESSAGE" value="restructure" />
   </component>
 </project>

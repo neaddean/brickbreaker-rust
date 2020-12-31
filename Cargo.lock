@@ -191,6 +191,7 @@ dependencies = [
  "ggez",
  "rand 0.8.0",
  "specs",
+ "winit",
 ]
 
 [[package]]

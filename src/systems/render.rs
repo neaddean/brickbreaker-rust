@@ -1,14 +1,11 @@
-use ggez::{ContextBuilder, event};
-use ggez::{Context, GameResult, graphics};
 use ggez::nalgebra as na;
+use ggez::{graphics, Context};
 use specs::{
-    Builder, Component, Dispatcher, DispatcherBuilder, join::Join, ReadStorage, RunNow, System,
+    join::Join, Builder, Component, Dispatcher, DispatcherBuilder, ReadStorage, RunNow, System,
     VecStorage, World, WorldExt, WriteStorage,
 };
 
 use crate::components::*;
-
-
 
 pub struct RenderingSystem<'a> {
     pub ctx: &'a mut Context,
