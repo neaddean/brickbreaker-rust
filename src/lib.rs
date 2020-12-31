@@ -1,3 +1,3 @@
-pub mod ball;
-pub mod bar;
-pub mod game;
+pub mod systems;
+pub mod components;
+pub mod entities;
