@@ -1,8 +1,10 @@
-use ggez::event::winit_event::*;
 use ggez::Context;
+use ggez::event::winit_event::*;
+use ggez::input::keyboard;
+use specs::{RunNow, WorldExt};
 use winit::EventsLoop;
-use specs::RunNow;
 
+use crate::resources::EventQueue;
 
 pub fn run(
     ctx: &mut Context,
@@ -10,13 +12,7 @@ pub fn run(
     dispatcher: &mut specs::Dispatcher,
     world: &mut specs::World,
 ) {
-    // use ggwz::input::{keyboard, mouse};
-
     while ctx.continuing {
-        // If you are writing your own event loop, make sure
-        // you include `timer_context.tick()` and
-        // `ctx.process_event()` calls.  These update ggez's
-        // internal state however necessary.
         ctx.timer_context.tick();
         events_loop.poll_events(|event| {
             ctx.process_event(&event);
@@ -25,6 +21,33 @@ pub fn run(
                     WindowEvent::CloseRequested => {
                         ctx.continuing = false;
                     }
+                    WindowEvent::ReceivedCharacter(_ch) => {}
+                    WindowEvent::KeyboardInput {
+                        input:
+                        KeyboardInput {
+                            state: ElementState::Pressed,
+                            virtual_keycode: Some(keycode),
+                            modifiers,
+                            ..
+                        },
+                        ..
+                    } => {
+                        let repeat = keyboard::is_key_repeated(ctx);
+                        {
+                            let mut event_queue = world.write_resource::<EventQueue>();
+                            event_queue.events.push(crate::events::Event::KeyDown(keycode, modifiers.into(), repeat))
+                        }
+                    }
+                    WindowEvent::KeyboardInput {
+                        input:
+                        KeyboardInput {
+                            state: ElementState::Released,
+                            virtual_keycode: Some(keycode),
+                            modifiers,
+                            ..
+                        },
+                        ..
+                    } => {}
                     _ => {}
                 },
                 _ => {}

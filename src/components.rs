@@ -14,7 +14,7 @@ impl Renderable {
     }
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 #[storage(VecStorage)]
 pub struct Position {
     pub x: f32,
@@ -22,7 +22,7 @@ pub struct Position {
     pub z: i32,
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 #[storage(VecStorage)]
 pub struct Velocity {
     pub x: f32,
