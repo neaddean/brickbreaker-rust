@@ -38,6 +38,11 @@ pub fn run(
             }
         });
         dispatcher.dispatch(world);
+        use specs::RunNow;
+        {
+            let mut rs = crate::systems::RenderingSystem {ctx};
+            rs.run_now(world);
+        }
     }
 
     Ok(())
