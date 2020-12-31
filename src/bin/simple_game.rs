@@ -1,4 +1,4 @@
-use ggez::{ContextBuilder, event};
+use ggez::{event, ContextBuilder};
 
 use bricktest::game;
 

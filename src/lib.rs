@@ -1,2 +1,3 @@
+pub mod ball;
+pub mod bar;
 pub mod game;
-mod bar;
