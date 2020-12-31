@@ -23,8 +23,7 @@ pub fn run(
                     }
                     WindowEvent::ReceivedCharacter(_ch) => {}
                     WindowEvent::KeyboardInput {
-                        input:
-                        KeyboardInput {
+                        input: KeyboardInput {
                             state: ElementState::Pressed,
                             virtual_keycode: Some(keycode),
                             modifiers,
@@ -38,16 +37,6 @@ pub fn run(
                             event_queue.events.push(crate::events::Event::KeyDown(keycode, modifiers.into(), repeat))
                         }
                     }
-                    WindowEvent::KeyboardInput {
-                        input:
-                        KeyboardInput {
-                            state: ElementState::Released,
-                            virtual_keycode: Some(_keycode),
-                            // _,
-                            ..
-                        },
-                        ..
-                    } => {}
                     _ => {}
                 },
                 _ => {}

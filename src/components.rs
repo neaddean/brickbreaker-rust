@@ -1,18 +1,17 @@
-use ggez::{graphics, Context};
 use specs::{Component, VecStorage};
 
 #[derive(Component)]
 #[storage(VecStorage)]
 pub struct Renderable {
-    pub texture: graphics::Image,
+    pub texture: String,
 }
 
-impl Renderable {
-    pub fn from_path(ctx: &mut Context, path: &str) -> Self {
-        let texture = graphics::Image::new(ctx, path).unwrap();
-        Renderable { texture }
-    }
-}
+// impl Renderable {
+//     pub fn from_path(ctx: &mut Context, path: &str) -> Self {
+//         let texture = graphics::Image::new(ctx, path).unwrap();
+//         Renderable { texture }
+//     }
+// }
 
 #[derive(Component, Default)]
 #[storage(VecStorage)]
