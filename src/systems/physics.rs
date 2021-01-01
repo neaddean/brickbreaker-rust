@@ -1,16 +1,25 @@
-use specs::{join::Join, System, WriteStorage};
+use specs::{join::Join, Read, System, WriteStorage};
 
 use crate::components::*;
+use crate::resources;
 
 pub struct PhysicsSystem;
 
 // System implementation
 impl<'a> System<'a> for PhysicsSystem {
     // Data
-    type SystemData = (WriteStorage<'a, Position>, WriteStorage<'a, Velocity>);
+    type SystemData = (WriteStorage<'a, Position>,
+                       WriteStorage<'a, Velocity>,
+                       Read<'a, resources::GameTime>);
 
     fn run(&mut self, data: Self::SystemData) {
-        let (mut positions, mut velocities) = data;
+        let (mut positions,
+            mut velocities,
+            game_time) = data;
+
+        if !game_time.do_update {
+            return;
+        }
 
         for (position, velocity) in (&mut positions, &mut velocities).join() {
             position.x += velocity.x;

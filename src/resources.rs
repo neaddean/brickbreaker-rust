@@ -9,3 +9,8 @@ pub struct EventQueue {
 // }
 
 pub type EntityQueue = Vec<crate::entities::EntityType>;
+
+#[derive(Default)]
+pub struct GameTime {
+    pub do_update : bool,
+}

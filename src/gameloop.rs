@@ -4,7 +4,8 @@ use ggez::input::keyboard;
 use specs::{RunNow, WorldExt};
 use winit::EventsLoop;
 
-use crate::resources::EventQueue;
+use crate::constants::SIMULATION_HZ;
+use crate::resources::{EventQueue, GameTime};
 
 pub fn run(
     ctx: &mut Context,
@@ -42,10 +43,18 @@ pub fn run(
                 _ => {}
             }
         });
+
+        {
+            let mut game_time = world.write_resource::<GameTime>();
+            game_time.do_update = ggez::timer::check_update_time(ctx, SIMULATION_HZ);
+        }
+
         dispatcher.dispatch(world);
+
         {
             let mut rs = crate::systems::RenderingSystem { ctx };
             rs.run_now(world);
         }
+        ggez::timer::yield_now();
     }
 }
