@@ -6,12 +6,6 @@ pub struct Renderable {
     pub texture: String,
 }
 
-// impl Renderable {
-//     pub fn from_path(ctx: &mut Context, path: &str) -> Self {
-//         let texture = graphics::Image::new(ctx, path).unwrap();
-//         Renderable { texture }
-//     }
-// }
 
 #[derive(Component, Default)]
 #[storage(VecStorage)]

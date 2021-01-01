@@ -22,7 +22,7 @@ impl<'a> System<'a> for EntityCreatorSystem {
             mut renderables
         ) = data;
 
-        for entity_to_create in entity_queue.entites.drain(..) {
+        for entity_to_create in entity_queue.drain(..) {
             match entity_to_create {
                 EntityType::Ball { x, y } => {
                     entites.build_entity()
