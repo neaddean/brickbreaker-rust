@@ -72,6 +72,13 @@ impl<'a> System<'a> for EventSystem {
                         (KeyCode::Escape, false, _) => {
                             game_state.continuing = false;
                         }
+                        (KeyCode::B, false, _) => {
+                            entity_queue.push(EntityType::Brick {
+                                x: thread_rng().gen_range(0.0..800.0),
+                                y: thread_rng().gen_range(0.0..600.0),
+                                health: thread_rng().gen_range(0..4)
+                            });
+                        }
                         _ => {}
                     }
                 }

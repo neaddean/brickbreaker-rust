@@ -14,6 +14,6 @@ pub fn run(
         if !world.write_resource::<GameState>().continuing {
             break;
         }
-        ggez::timer::yield_now();
+        // ggez::timer::yield_now();
     }
 }

@@ -1,4 +1,4 @@
-use specs::{Entities, Read, System, Write, WriteStorage, ReadExpect};
+use specs::{Entities, Read, ReadExpect, System, Write, WriteStorage};
 
 use crate::{components::*, entities::EntityType, resources::{EntityQueue, GameState}};
 use crate::resources::AssetCache;
@@ -16,6 +16,7 @@ impl<'a> System<'a> for EntityCreatorSystem {
                        WriteStorage<'a, Renderable>,
                        WriteStorage<'a, Ball>,
                        WriteStorage<'a, Bar>,
+                       WriteStorage<'a, Brick>,
                        ReadExpect<'a, GameState>,
                        Read<'a, AssetCache>);
 
@@ -27,6 +28,7 @@ impl<'a> System<'a> for EntityCreatorSystem {
             mut renderables,
             mut ball_storage,
             mut bar_storage,
+            mut brick_storage,
             game_state,
             asset_cache,
         ) = data;
@@ -37,7 +39,7 @@ impl<'a> System<'a> for EntityCreatorSystem {
                     let asset_name = "/ball.png".to_string();
                     let dimensions = asset_cache.cache.get(&asset_name).unwrap().dimensions();
                     entites.build_entity()
-                        .with(Ball {radius : dimensions.w},
+                        .with(Ball { radius: dimensions.w },
                               &mut ball_storage)
                         .with(Position {
                             x: 0.0,
@@ -75,7 +77,25 @@ impl<'a> System<'a> for EntityCreatorSystem {
                         }, &mut renderables)
                         .build();
                 }
-                _ => {}
+                EntityType::Brick { x, y, health } => {
+                    let asset_name = "/green1.png".to_string();
+                    let dimensions = asset_cache.cache.get(&asset_name).unwrap().dimensions();
+                    entites.build_entity()
+                        .with(Brick {
+                            width: dimensions.w,
+                            height: dimensions.h,
+                            health,
+                        }, &mut brick_storage)
+                        .with(Position {
+                            x,
+                            y,
+                            z: 9,
+                        }, &mut positions)
+                        .with(Renderable {
+                            asset_name
+                        }, &mut renderables)
+                        .build();
+                }
             }
         }
     }

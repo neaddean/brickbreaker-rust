@@ -44,6 +44,9 @@ fn main() {
         entity_queue.push(entities::EntityType::Ball { x: -15.0, y: 90.0 });
         entity_queue.push(entities::EntityType::Ball { x: -130.0, y: 20.0 });
         entity_queue.push(entities::EntityType::Bar);
+
+        entity_queue.push(entities::EntityType::Brick { x: 50.0, y: 50.0, health: 2 });
+        entity_queue.push(entities::EntityType::Brick { x: 500.0, y: 500.0, health: 2 });
     }
     {
         let mut asset_cache = world.write_resource::<AssetCache>();

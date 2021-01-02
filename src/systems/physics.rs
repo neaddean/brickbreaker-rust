@@ -1,4 +1,5 @@
-use specs::{Entities, join::Join, ReadStorage, System, WriteStorage, ReadExpect};
+use num::traits::Pow;
+use specs::{Entities, join::Join, ReadExpect, ReadStorage, System, WriteStorage};
 
 use crate::components::*;
 use crate::constants::SIMULATION_DURATION;
@@ -21,6 +22,7 @@ impl<'a> System<'a> for PhysicsSystem {
                        WriteStorage<'a, Velocity>,
                        ReadStorage<'a, Ball>,
                        ReadStorage<'a, Bar>,
+                       WriteStorage<'a, Brick>,
                        ReadExpect<'a, resources::GameState>,
                        Entities<'a>);
 
@@ -29,6 +31,7 @@ impl<'a> System<'a> for PhysicsSystem {
             mut velocities,
             balls,
             bars,
+            mut bricks,
             game_state,
             entities
         ) = data;
@@ -85,13 +88,81 @@ impl<'a> System<'a> for PhysicsSystem {
                     {
                         velocity.y *= -1.0;
                         position.y = bar.y - bar.height / 2.0 - ball.radius / 2.0;
-                        // let offset = position.x - bar.x - bar.width / 2.0;
-                        // position.y = bar.y - bar.height / 2.0 - ball.radius / 2.0;
-                        // velocity.x = 1.0 + 6.0 * offset / bar.width / 2.0;
-                        // velocity.y *= -6.0 + offset * 2.0 / bar.width * 4.0
+                    }
+                }
+            }
+            for (brick_entity, brick) in (&entities, &mut bricks).join() {
+                let brick_pos = *positions.get(brick_entity).unwrap();
+                for (ball_entity, ball) in (&entities, &balls).join() {
+                    let ball_pos = positions.get_mut(ball_entity).unwrap();
+
+                    let (x_side, x_center) = match ball_pos.x {
+                        x if x < brick_pos.x - brick.width / 2.0 => {
+                            (Some(BrickCollision), brick_pos.x - brick.width / 2.0)
+                        }
+                        x if x > brick_pos.x + brick.width / 2.0 => {
+                            (Some(BrickCollision), brick_pos.x + brick.width / 2.0)
+                        }
+                        x => {
+                            (None, x)
+                        }
+                    };
+
+                    let (y_side, y_center) = match ball_pos.y {
+                        y if y < brick_pos.y - brick.height / 2.0 => {
+                            (Some(BrickCollision), brick_pos.y - brick.height / 2.0)
+                        }
+                        y if y > brick_pos.y + brick.height / 2.0 => {
+                            (Some(BrickCollision), brick_pos.y + brick.height / 2.0)
+                        }
+                        y => {
+                            (None, y)
+                        }
+                    };
+
+                    if <f32>::sqrt((ball_pos.x - x_center).pow(2.0) + (ball_pos.y - y_center).pow(2.0)) < ball.radius {
+                        brick.health = brick.health.checked_sub(1).unwrap_or(0);
+                        if brick.health <= 0 {
+                            entities.delete(brick_entity).unwrap();
+                        }
+                        let ball_vel = velocities.get_mut(ball_entity).unwrap();
+                        match x_side {
+                            Some(_) => {
+                                ball_vel.x *= -1.0;
+                                ball_pos.x += ball_vel.x * SIMULATION_DURATION;
+                            }
+                            // Some(BrickCollisionSideX::RIGHT) => {
+                            //     ball_vel.x *= -1.0;
+                            //     ball_pos.x += ball_vel.x * SIMULATION_DURATION;
+                            // }
+                            None => {}
+                        };
+                        match y_side {
+                            Some(_) => {
+                                ball_vel.y *= -1.0;
+                                ball_pos.y += ball_vel.y * SIMULATION_DURATION;
+                            }
+                            // Some(BrickCollisionSideY::BOTTOM) => {
+                            //     ball_vel.y *= -1.0;
+                            //     ball_pos.y += ball_vel.y * SIMULATION_DURATION;
+                            // }
+                            None => {}
+                        };
                     }
                 }
             }
         }
     }
 }
+
+struct BrickCollision;
+
+// enum BrickCollisionSideX {
+//     LEFT,
+//     RIGHT,
+// }
+//
+// enum BrickCollisionSideY {
+//     TOP,
+//     BOTTOM,
+// }

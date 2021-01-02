@@ -20,8 +20,15 @@ pub struct Bar {
     pub height: f32,
 }
 
+#[derive(Component)]
+#[storage(VecStorage)]
+pub struct Brick {
+    pub health: u8,
+    pub width: f32,
+    pub height: f32,
+}
 
-#[derive(Component, Default)]
+#[derive(Component, Default, Copy, Clone)]
 #[storage(VecStorage)]
 pub struct Position {
     pub x: f32,
@@ -29,7 +36,7 @@ pub struct Position {
     pub z: u8,
 }
 
-#[derive(Component, Default)]
+#[derive(Component, Default, Copy, Clone)]
 #[storage(VecStorage)]
 pub struct Velocity {
     pub x: f32,
