@@ -1,10 +1,13 @@
+use std::cell::RefCell;
 use std::collections::HashMap;
+use std::rc::Rc;
 
 use ggez::ContextBuilder;
 use specs::{DispatcherBuilder, World, WorldExt};
 
-use bricktest::{components, entities, systems::{EntityCreatorSystem, EventSystem, PhysicsSystem}};
+use bricktest::{entities, systems::{EntityCreatorSystem, EventSystem, PhysicsSystem}};
 use bricktest::resources::{AssetCache, EntityQueue, GameState};
+use bricktest::systems::{InputSystem, RenderingSystem};
 
 fn main() {
     let resource_dir = if let Ok(manifest_dir) = std::env::var("CARGO_MANIFEST_DIR") {
@@ -20,13 +23,17 @@ fn main() {
         .build()
         .unwrap();
 
+    let ctx = Rc::new(RefCell::new(ctx));
+
     let ref mut world = World::new();
-    world.register::<components::Renderable>();
+    world.insert(GameState::new(*ctx.borrow_mut()));
 
     let ref mut dispatcher = DispatcherBuilder::new()
         .with(EventSystem, "events", &[])
         .with(EntityCreatorSystem, "entites", &["events"])
-        .with(PhysicsSystem, "physics", &["entites"])
+        .with(PhysicsSystem::default(), "physics", &["entites"])
+        .with_thread_local(InputSystem { ctx: Rc::clone(&ctx), event_loop })
+        .with_thread_local(RenderingSystem { ctx: Rc::clone(&ctx), accum: 0.0 })
         .build();
 
     dispatcher.setup(world);
@@ -44,14 +51,7 @@ fn main() {
 
     {
         let mut asset_cache = world.write_resource::<AssetCache>();
-        asset_cache.load_assets(ctx);
+        asset_cache.load_assets(*ctx.borrow_mut());
     }
-
-    {
-        let mut game_state = world.write_resource::<GameState>();
-        game_state.show_fps = true;
-        game_state.continuing = true;
-    }
-
-    bricktest::gameloop::run(ctx, event_loop, dispatcher, world);
+    bricktest::gameloop::run(dispatcher, world);
 }

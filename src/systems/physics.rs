@@ -1,10 +1,13 @@
-use specs::{Entities, join::Join, ReadStorage, System, Write, WriteStorage};
+use specs::{Entities, join::Join, ReadStorage, System, WriteStorage, ReadExpect};
 
 use crate::components::*;
 use crate::constants::SIMULATION_DURATION;
 use crate::resources;
 
-pub struct PhysicsSystem;
+#[derive(Default)]
+pub struct PhysicsSystem {
+    accum: f32
+}
 
 struct BarDescriptor {
     pub x: f32,
@@ -13,14 +16,12 @@ struct BarDescriptor {
     pub width: f32,
 }
 
-// System implementation
 impl<'a> System<'a> for PhysicsSystem {
-    // Data
     type SystemData = (WriteStorage<'a, Position>,
                        WriteStorage<'a, Velocity>,
                        ReadStorage<'a, Ball>,
                        ReadStorage<'a, Bar>,
-                       Write<'a, resources::GameState>,
+                       ReadExpect<'a, resources::GameState>,
                        Entities<'a>);
 
     fn run(&mut self, data: Self::SystemData) {
@@ -28,10 +29,13 @@ impl<'a> System<'a> for PhysicsSystem {
             mut velocities,
             balls,
             bars,
-            mut game_state,
+            game_state,
             entities
         ) = data;
-        while game_state.pending_updates > 0 {
+
+        self.accum += game_state.this_duration().as_secs_f32();
+        while self.accum > SIMULATION_DURATION {
+            self.accum -= SIMULATION_DURATION;
             let mut bar_desc: Vec<BarDescriptor> = Vec::new();
 
             // move bar and check if it's at the edge of screen
@@ -88,7 +92,6 @@ impl<'a> System<'a> for PhysicsSystem {
                     }
                 }
             }
-            game_state.pending_updates -= 1;
         }
     }
 }
