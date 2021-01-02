@@ -1,8 +1,9 @@
 use ggez::{Context, graphics};
 use ggez::nalgebra as na;
-use specs::{join::Join, ReadStorage, System};
+use specs::{join::Join, Read, ReadStorage, System};
 
 use crate::components::*;
+use crate::resources;
 
 pub struct RenderingSystem<'a> {
     pub ctx: &'a mut Context,
@@ -28,13 +29,17 @@ impl RenderingSystem<'_> {
 
 impl<'a> System<'a> for RenderingSystem<'a> {
     type SystemData = (ReadStorage<'a, Position>,
-                       ReadStorage<'a, Renderable>);
+                       ReadStorage<'a, Renderable>,
+                       Read<'a, resources::AssetCache>);
 
 
     fn run(&mut self, data: Self::SystemData) {
         graphics::clear(self.ctx, graphics::Color::new(0.0, 0.0, 0.0, 1.0));
 
-        let (positions, renderables) = data;
+        let (positions,
+            renderables,
+            asset_cache,
+        ) = data;
         let mut rendering_data = (&positions, &renderables).join().collect::<Vec<_>>();
         rendering_data.sort_by_key(|&k| k.0.z);
 
@@ -43,8 +48,8 @@ impl<'a> System<'a> for RenderingSystem<'a> {
                 graphics::DrawParam::new()
                     .dest(na::Point2::new(position.x, position.y))
                     .offset(na::Point2::new(0.5, 0.5));
-            let texture = graphics::Image::new(self.ctx, &renderable.texture).unwrap();
-            graphics::draw(self.ctx, &texture, draw_params).unwrap();
+            let texture = asset_cache.cache.get(&renderable.asset_name).unwrap();
+            graphics::draw(self.ctx, texture, draw_params).unwrap();
         }
 
         self.draw_text(format!("{:0.2}", ggez::timer::fps(self.ctx)).as_str(), 0.0, 0.0);

@@ -1,4 +1,4 @@
-use specs::{join::Join, Read, System, WriteStorage};
+use specs::{join::Join, Read, ReadStorage, System, WriteStorage};
 
 use crate::components::*;
 use crate::resources;
@@ -10,18 +10,23 @@ impl<'a> System<'a> for PhysicsSystem {
     // Data
     type SystemData = (WriteStorage<'a, Position>,
                        WriteStorage<'a, Velocity>,
-                       Read<'a, resources::GameTime>);
+                       ReadStorage<'a, Ball>,
+                       ReadStorage<'a, Bar>,
+                       Read<'a, resources::GameState>);
 
     fn run(&mut self, data: Self::SystemData) {
         let (mut positions,
             mut velocities,
-            game_time) = data;
+            balls,
+            _bars,
+            game_state,
+        ) = data;
 
-        if !game_time.do_update {
+        if !game_state.do_update {
             return;
         }
 
-        for (position, velocity) in (&mut positions, &mut velocities).join() {
+        for (position, velocity, _) in (&mut positions, &mut velocities, &balls).join() {
             position.x += velocity.x;
             position.y += velocity.y;
 

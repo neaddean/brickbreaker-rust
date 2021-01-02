@@ -3,8 +3,17 @@ use specs::{Component, VecStorage};
 #[derive(Component)]
 #[storage(VecStorage)]
 pub struct Renderable {
-    pub texture: String,
+    pub asset_name: String,
 }
+
+
+#[derive(Component)]
+#[storage(VecStorage)]
+pub struct Ball;
+
+#[derive(Component)]
+#[storage(VecStorage)]
+pub struct Bar;
 
 
 #[derive(Component, Default)]

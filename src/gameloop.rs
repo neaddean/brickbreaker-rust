@@ -5,7 +5,7 @@ use specs::{RunNow, WorldExt};
 use winit::EventsLoop;
 
 use crate::constants::SIMULATION_HZ;
-use crate::resources::{EventQueue, GameTime};
+use crate::resources::{EventQueue, GameState};
 
 pub fn run(
     ctx: &mut Context,
@@ -13,6 +13,10 @@ pub fn run(
     dispatcher: &mut specs::Dispatcher,
     world: &mut specs::World,
 ) {
+    {
+        let mut game_state = world.write_resource::<GameState>();
+        game_state.screen_size = ggez::graphics::drawable_size(ctx);
+    }
     while ctx.continuing {
         ctx.timer_context.tick();
         events_loop.poll_events(|event| {
@@ -45,8 +49,8 @@ pub fn run(
         });
 
         {
-            let mut game_time = world.write_resource::<GameTime>();
-            game_time.do_update = ggez::timer::check_update_time(ctx, SIMULATION_HZ);
+            let mut game_state = world.write_resource::<GameState>();
+            game_state.do_update = ggez::timer::check_update_time(ctx, SIMULATION_HZ);
         }
 
         dispatcher.dispatch(world);

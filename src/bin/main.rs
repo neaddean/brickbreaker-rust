@@ -2,7 +2,8 @@ use ggez::ContextBuilder;
 use specs::{DispatcherBuilder, World, WorldExt};
 
 use bricktest::{components, entities, systems::{EntityCreatorSystem, EventSystem, PhysicsSystem}};
-use bricktest::resources::EntityQueue;
+use bricktest::resources::{AssetCache, EntityQueue};
+use std::collections::HashMap;
 
 fn main() {
     let resource_dir = if let Ok(manifest_dir) = std::env::var("CARGO_MANIFEST_DIR") {
@@ -35,6 +36,14 @@ fn main() {
         entity_queue.push(entities::EntityType::Ball { x: 0.5, y: 0.75 });
         entity_queue.push(entities::EntityType::Ball { x: -0.25, y: 1.75 });
         entity_queue.push(entities::EntityType::Ball { x: 2.25, y: 1.33 });
+        entity_queue.push(entities::EntityType::Bar);
+    }
+
+    world.insert(AssetCache {cache: HashMap::new()});
+
+    {
+        let mut asset_cache = world.write_resource::<AssetCache>();
+        asset_cache.load_assets(ctx);
     }
 
     bricktest::gameloop::run(ctx, event_loop, dispatcher, world);

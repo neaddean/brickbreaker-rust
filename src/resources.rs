@@ -1,16 +1,31 @@
+use std::collections::HashMap;
+
 #[derive(Default)]
 pub struct EventQueue {
     pub events: Vec<crate::events::Event>,
 }
 
-// #[derive(Default)]
-// pub struct EntityQueue {
-//     pub entites: Vec<crate::entities::EntityType>,
-// }
-
 pub type EntityQueue = Vec<crate::entities::EntityType>;
 
 #[derive(Default)]
-pub struct GameTime {
-    pub do_update : bool,
+pub struct GameState {
+    pub do_update: bool,
+    pub screen_size: (f32, f32),
+}
+
+#[derive(Default)]
+pub struct AssetCache {
+    pub cache: HashMap<String, ggez::graphics::Image>,
+}
+
+impl AssetCache {
+    pub fn load_assets(&mut self, ctx: &mut ggez::Context) {
+        for path in ggez::filesystem::read_dir(ctx, "/")
+            .unwrap()
+            .filter(|p| p.to_str().unwrap().ends_with(".png")) {
+            println!("Loading asset: {}", path.to_str().unwrap());
+            self.cache.insert(String::from(path.to_str().unwrap()),
+                              ggez::graphics::Image::new(ctx, path).unwrap());
+        }
+    }
 }
