@@ -57,7 +57,8 @@ impl<'a> System<'a> for RenderingSystem<'a> {
                 .entry(renderable.asset_name.to_string())
                 .or_default()
                 .push(graphics::DrawParam::new()
-                    .dest(na::Point2::new(position.x, position.y)));
+                    .dest(na::Point2::new(position.x, position.y))
+                    .offset(na::Point2::new(0.5, 0.5)));
         }
 
         // Iterate spritebatches ordered by z and actually render each of them

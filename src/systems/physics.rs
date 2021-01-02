@@ -26,17 +26,19 @@ impl<'a> System<'a> for PhysicsSystem {
             return;
         }
 
+        // move bar and check if it's at the edge of screen
         for (position, velocity, bar) in (&mut positions, &mut velocities, &bars).join() {
             position.x += velocity.x;
             position.y += velocity.y;
 
-            if position.x < 0.0 {
-                position.x = 0.0
-            } else if position.x + bar.width > game_state.screen_size.0 {
-                position.x = game_state.screen_size.0 - bar.width;
+            if position.x < bar.width / 2.0 {
+                position.x = bar.width / 2.0;
+            } else if position.x + bar.width / 2.0 > game_state.screen_size.0 {
+                position.x = game_state.screen_size.0 - bar.width / 2.0;
             }
         }
 
+        // move alls and if they are colliding with anything, reverse velocity
         for (position, velocity, _) in (&mut positions, &mut velocities, &balls).join() {
             position.x += velocity.x;
             position.y += velocity.y;

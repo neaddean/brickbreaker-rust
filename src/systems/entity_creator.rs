@@ -61,8 +61,8 @@ impl<'a> System<'a> for EntityCreatorSystem {
                             height: dimensions.h,
                         }, &mut bar_storage)
                         .with(Position {
-                            x: game_state.screen_size.0 / 2.0 - dimensions.w,
-                            y: game_state.screen_size.1 - dimensions.h,
+                            x: game_state.screen_size.0 / 2.0 - dimensions.w / 2.0,
+                            y: game_state.screen_size.1 - dimensions.h / 2.0,
                             z: 5,
                         }, &mut positions)
                         .with(Velocity {
