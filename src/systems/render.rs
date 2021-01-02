@@ -44,11 +44,11 @@ impl<'a> System<'a> for RenderingSystem<'a> {
         rendering_data.sort_by_key(|&k| k.0.z);
 
         for (position, renderable) in rendering_data.iter() {
+            let texture = asset_cache.cache.get(&renderable.asset_name).unwrap();
             let draw_params =
                 graphics::DrawParam::new()
                     .dest(na::Point2::new(position.x, position.y))
-                    .offset(na::Point2::new(0.5, 0.5));
-            let texture = asset_cache.cache.get(&renderable.asset_name).unwrap();
+                    .offset(na::Point2::new(0.0, 0.0));
             graphics::draw(self.ctx, texture, draw_params).unwrap();
         }
 

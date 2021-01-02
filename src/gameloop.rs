@@ -42,6 +42,20 @@ pub fn run(
                             event_queue.events.push(crate::events::Event::KeyDown(keycode, modifiers.into(), repeat))
                         }
                     }
+                    WindowEvent::KeyboardInput {
+                        input: KeyboardInput {
+                            state: ElementState::Released,
+                            virtual_keycode: Some(keycode),
+                            modifiers,
+                            ..
+                        },
+                        ..
+                    } => {
+                        {
+                            let mut event_queue = world.write_resource::<EventQueue>();
+                            event_queue.events.push(crate::events::Event::KeyUp(keycode, modifiers.into()))
+                        }
+                    }
                     _ => {}
                 },
                 _ => {}

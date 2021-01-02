@@ -1,6 +1,7 @@
 use specs::{Entities, Read, System, Write, WriteStorage};
 
 use crate::{components::*, entities::EntityType, resources::{EntityQueue, GameState}};
+use crate::resources::AssetCache;
 
 pub struct EntityCreatorSystem;
 
@@ -15,7 +16,8 @@ impl<'a> System<'a> for EntityCreatorSystem {
                        WriteStorage<'a, Renderable>,
                        WriteStorage<'a, Ball>,
                        WriteStorage<'a, Bar>,
-                       Read<'a, GameState>);
+                       Read<'a, GameState>,
+                       Read<'a, AssetCache>);
 
     fn run(&mut self, data: Self::SystemData) {
         let (mut entity_queue,
@@ -26,11 +28,13 @@ impl<'a> System<'a> for EntityCreatorSystem {
             mut ball_storage,
             mut bar_storage,
             game_state,
+            asset_cache,
         ) = data;
 
         for entity_to_create in entity_queue.drain(..) {
             match entity_to_create {
                 EntityType::Ball { x, y } => {
+                    let asset_name = "/ball.png".to_string();
                     entites.build_entity()
                         .with(Ball,
                               &mut ball_storage)
@@ -44,25 +48,29 @@ impl<'a> System<'a> for EntityCreatorSystem {
                             y,
                         }, &mut velocities)
                         .with(Renderable {
-                            asset_name: "/ball.png".to_string()
+                            asset_name
                         }, &mut renderables)
                         .build();
                 }
                 EntityType::Bar => {
+                    let asset_name = "/bar.png".to_string();
+                    let dimensions = asset_cache.cache.get(&asset_name).unwrap().dimensions();
                     entites.build_entity()
-                        .with(Bar,
-                              &mut bar_storage)
+                        .with(Bar {
+                            width: dimensions.w,
+                            height: dimensions.h,
+                        }, &mut bar_storage)
                         .with(Position {
-                            x: game_state.screen_size.0 / 2.0,
-                            y: game_state.screen_size.1 / 2.0,
+                            x: game_state.screen_size.0 / 2.0 - dimensions.w,
+                            y: game_state.screen_size.1 - dimensions.h,
                             z: 0,
                         }, &mut positions)
-                        // .with(Velocity {
-                        //     0.0,
-                        //     0.0,
-                        // }, &mut velocities)
+                        .with(Velocity {
+                            x: 0.0,
+                            y: 0.0,
+                        }, &mut velocities)
                         .with(Renderable {
-                            asset_name: "/bar.png".to_string()
+                            asset_name
                         }, &mut renderables)
                         .build();
                 }

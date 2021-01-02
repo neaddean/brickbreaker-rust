@@ -18,12 +18,23 @@ impl<'a> System<'a> for PhysicsSystem {
         let (mut positions,
             mut velocities,
             balls,
-            _bars,
+            bars,
             game_state,
         ) = data;
 
         if !game_state.do_update {
             return;
+        }
+
+        for (position, velocity, bar) in (&mut positions, &mut velocities, &bars).join() {
+            position.x += velocity.x;
+            position.y += velocity.y;
+
+            if position.x < 0.0 {
+                position.x = 0.0
+            } else if position.x + bar.width > game_state.screen_size.0 {
+                position.x = game_state.screen_size.0 - bar.width;
+            }
         }
 
         for (position, velocity, _) in (&mut positions, &mut velocities, &balls).join() {

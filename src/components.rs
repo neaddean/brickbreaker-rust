@@ -13,7 +13,10 @@ pub struct Ball;
 
 #[derive(Component)]
 #[storage(VecStorage)]
-pub struct Bar;
+pub struct Bar {
+    pub width: f32,
+    pub height: f32,
+}
 
 
 #[derive(Component, Default)]
