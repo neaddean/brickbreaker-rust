@@ -16,25 +16,17 @@ pub struct RenderingSystem<'a> {
 impl RenderingSystem<'_> {
     fn draw_text(&mut self, text_string: &str, x: f32, y: f32) {
         let text = graphics::Text::new(text_string);
-        let destination = na::Point2::new(x, y);
         let color = Some(graphics::Color::new(0.0, 1.0, 0.0, 1.0));
-        let dimensions = na::Point2::new(2.0, 2.0);
-
+        let dimensions = na::Point2::new(x, y);
         graphics::queue_text(self.ctx, &text, dimensions, color);
-        graphics::draw_queued_text(
-            self.ctx,
-            graphics::DrawParam::new().dest(destination),
-            None,
-            graphics::FilterMode::Linear,
-        )
-            .expect("expected drawing queued text");
     }
 }
 
 impl<'a> System<'a> for RenderingSystem<'a> {
     type SystemData = (ReadStorage<'a, Position>,
                        ReadStorage<'a, Renderable>,
-                       Read<'a, resources::AssetCache>);
+                       Read<'a, resources::AssetCache>,
+                       Read<'a, resources::GameState>);
 
 
     fn run(&mut self, data: Self::SystemData) {
@@ -43,6 +35,7 @@ impl<'a> System<'a> for RenderingSystem<'a> {
         let (positions,
             renderables,
             asset_cache,
+            game_state,
         ) = data;
         // let mut rendering_data = (&positions, &renderables).join().collect::<Vec<_>>();
 
@@ -78,8 +71,16 @@ impl<'a> System<'a> for RenderingSystem<'a> {
             }
         }
 
-        self.draw_text(format!("{:0.2}", ggez::timer::fps(self.ctx)).as_str(), 0.0, 0.0);
-
+        if game_state.show_fps {
+            self.draw_text(format!("{:0.2}", ggez::timer::fps(self.ctx)).as_str(), 0.0, 0.0);
+        }
+        graphics::draw_queued_text(
+            self.ctx,
+            graphics::DrawParam::new().dest(na::Point2::new(0.0, 0.0)),
+            None,
+            graphics::FilterMode::Linear,
+        )
+            .expect("expected drawing queued text");
         graphics::present(self.ctx).unwrap();
     }
 }

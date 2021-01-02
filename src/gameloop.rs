@@ -17,14 +17,15 @@ pub fn run(
         let mut game_state = world.write_resource::<GameState>();
         game_state.screen_size = ggez::graphics::drawable_size(ctx);
     }
-    while ctx.continuing {
+    loop {
         ctx.timer_context.tick();
         events_loop.poll_events(|event| {
             ctx.process_event(&event);
             match event {
                 Event::WindowEvent { event, .. } => match event {
                     WindowEvent::CloseRequested => {
-                        ctx.continuing = false;
+                        let mut game_state = world.write_resource::<GameState>();
+                        game_state.continuing = false;
                     }
                     WindowEvent::ReceivedCharacter(_ch) => {}
                     WindowEvent::KeyboardInput {
@@ -65,10 +66,13 @@ pub fn run(
         {
             let mut game_state = world.write_resource::<GameState>();
             game_state.do_update = ggez::timer::check_update_time(ctx, SIMULATION_HZ);
+            if !game_state.continuing {
+                break;
+            }
         }
 
         dispatcher.dispatch(world);
-
+        world.maintain();
         {
             let mut rs = crate::systems::RenderingSystem { ctx };
             rs.run_now(world);

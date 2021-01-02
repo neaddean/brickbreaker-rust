@@ -9,7 +9,9 @@ pub struct Renderable {
 
 #[derive(Component)]
 #[storage(VecStorage)]
-pub struct Ball;
+pub struct Ball {
+    pub radius: f32,
+}
 
 #[derive(Component)]
 #[storage(VecStorage)]

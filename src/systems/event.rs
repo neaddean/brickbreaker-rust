@@ -1,9 +1,10 @@
-use ggez::input::keyboard::KeyCode;
+use ggez::input::keyboard::{KeyCode, KeyMods};
 use rand::{Rng, thread_rng};
 use specs::{join::Join, ReadStorage, System, Write, WriteStorage};
 
 use crate::{components::*, events::Event, resources::{EntityQueue, EventQueue}};
 use crate::entities::EntityType;
+use crate::resources::GameState;
 
 pub struct EventSystem;
 
@@ -15,7 +16,9 @@ impl<'a> System<'a> for EventSystem {
                        WriteStorage<'a, Position>,
                        WriteStorage<'a, Velocity>,
                        ReadStorage<'a, Ball>,
-                       ReadStorage<'a, Bar>);
+                       ReadStorage<'a, Bar>,
+                       Write<'a, GameState>
+    );
 
     fn run(&mut self, data: Self::SystemData) {
         let (mut event_queue,
@@ -24,40 +27,47 @@ impl<'a> System<'a> for EventSystem {
             mut velocities,
             balls,
             bars,
+            mut game_state,
         ) = data;
 
         for event in event_queue.events.drain(..) {
             println!("New event: {:?}", event);
             match event {
                 Event::KeyDown(key_code, _key_mods, _is_repeated) => {
-                    match (key_code, _is_repeated) {
-                        (KeyCode::Up, _) => {
+                    match (key_code, _is_repeated, _key_mods) {
+                        (KeyCode::Up, _, _) => {
                             for (vel, _) in (&mut velocities, &balls).join() {
                                 vel.x += 2.0 * num::signum(vel.x);
                                 vel.y += 2.0 * num::signum(vel.y);
                             }
                         }
-                        (KeyCode::Down, _) => {
+                        (KeyCode::Down, _, _) => {
                             for (vel, _) in (&mut velocities, &balls).join() {
                                 vel.x -= 2.0 * num::signum(vel.x);
                                 vel.y -= 2.0 * num::signum(vel.y);
                             }
                         }
-                        (KeyCode::Right, false) => {
+                        (KeyCode::Right, false, _) => {
                             for (vel, _) in (&mut velocities, &bars).join() {
                                 vel.x = 10.0;
                             }
                         }
-                        (KeyCode::Left, false) => {
+                        (KeyCode::Left, false, _) => {
                             for (vel, _) in (&mut velocities, &bars).join() {
                                 vel.x = -10.0;
                             }
                         }
-                        (KeyCode::Space, false) => {
+                        (KeyCode::Space, false, _) => {
                             entity_queue.push(EntityType::Ball {
                                 x: thread_rng().gen_range(-2.0..2.0),
                                 y: thread_rng().gen_range(-2.0..2.0),
                             });
+                        }
+                        (KeyCode::F, false, KeyMods::CTRL) => {
+                            game_state.show_fps ^= true;
+                        }
+                        (KeyCode::Escape, false, _) => {
+                            game_state.continuing = false;
                         }
                         _ => {}
                     }

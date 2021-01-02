@@ -35,8 +35,9 @@ impl<'a> System<'a> for EntityCreatorSystem {
             match entity_to_create {
                 EntityType::Ball { x, y } => {
                     let asset_name = "/ball.png".to_string();
+                    let dimensions = asset_cache.cache.get(&asset_name).unwrap().dimensions();
                     entites.build_entity()
-                        .with(Ball,
+                        .with(Ball {radius : dimensions.w},
                               &mut ball_storage)
                         .with(Position {
                             x: 0.0,

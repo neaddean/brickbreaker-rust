@@ -24,4 +24,4 @@ minor = 2
 
 [modules]
 gamepad = false
-audio = false
+audio = true
