@@ -8,12 +8,12 @@ min_width = 10.0
 min_height = 10.0
 max_width = 1000.0
 max_height = 1000.0
-resizable = true
+resizable = false
 
 [window_setup]
 title = "brickbeaker"
 samples = "Zero"
-vsync = true
+vsync = false
 icon = ""
 srgb = true
 
