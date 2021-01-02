@@ -41,7 +41,7 @@ impl<'a> System<'a> for EntityCreatorSystem {
                         .with(Position {
                             x: 0.0,
                             y: 0.0,
-                            z: 0,
+                            z: 10,
                         }, &mut positions)
                         .with(Velocity {
                             x,
@@ -63,7 +63,7 @@ impl<'a> System<'a> for EntityCreatorSystem {
                         .with(Position {
                             x: game_state.screen_size.0 / 2.0 - dimensions.w,
                             y: game_state.screen_size.1 - dimensions.h,
-                            z: 0,
+                            z: 5,
                         }, &mut positions)
                         .with(Velocity {
                             x: 0.0,

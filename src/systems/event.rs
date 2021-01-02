@@ -45,12 +45,12 @@ impl<'a> System<'a> for EventSystem {
                         }
                         (KeyCode::Right, false) => {
                             for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x += 10.0;
+                                vel.x = 10.0;
                             }
                         }
                         (KeyCode::Left, false) => {
                             for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x -= 10.0;
+                                vel.x = -10.0;
                             }
                         }
                         (KeyCode::Space, false) => {
@@ -66,12 +66,12 @@ impl<'a> System<'a> for EventSystem {
                     match key_code {
                         KeyCode::Right => {
                             for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x -= 10.0;
+                                vel.x = 0.0;
                             }
                         }
                         KeyCode::Left => {
                             for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x += 10.0;
+                                vel.x = 0.0;
                             }
                         }
                         _ => {}
