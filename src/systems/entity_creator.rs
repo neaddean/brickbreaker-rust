@@ -1,4 +1,4 @@
-use specs::{Entities, Read, System, Write, WriteStorage};
+use specs::{Entities, Read, System, Write, WriteStorage, ReadExpect};
 
 use crate::{components::*, entities::EntityType, resources::{EntityQueue, GameState}};
 use crate::resources::AssetCache;
@@ -16,7 +16,7 @@ impl<'a> System<'a> for EntityCreatorSystem {
                        WriteStorage<'a, Renderable>,
                        WriteStorage<'a, Ball>,
                        WriteStorage<'a, Bar>,
-                       Read<'a, GameState>,
+                       ReadExpect<'a, GameState>,
                        Read<'a, AssetCache>);
 
     fn run(&mut self, data: Self::SystemData) {

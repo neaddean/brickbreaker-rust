@@ -4,5 +4,5 @@ use ggez::event::{KeyCode, KeyMods};
 pub enum Event {
     KeyDown(KeyCode, KeyMods, bool),
     KeyUp(KeyCode, KeyMods),
+    CloseGame,
 }
-

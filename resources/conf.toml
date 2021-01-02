@@ -13,7 +13,7 @@ resizable = false
 [window_setup]
 title = "brickbeaker"
 samples = "Zero"
-vsync = true
+vsync = false
 icon = ""
 srgb = true
 
