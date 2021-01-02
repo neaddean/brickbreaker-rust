@@ -33,10 +33,10 @@ fn main() {
 
     {
         let mut entity_queue = world.write_resource::<EntityQueue>();
-        entity_queue.push(entities::EntityType::Ball { x: 1.0, y: 2.0 });
-        entity_queue.push(entities::EntityType::Ball { x: 0.5, y: 0.75 });
-        entity_queue.push(entities::EntityType::Ball { x: -0.25, y: 1.75 });
-        entity_queue.push(entities::EntityType::Ball { x: 2.25, y: 1.33 });
+        entity_queue.push(entities::EntityType::Ball { x: 60.0, y: 100.0 });
+        entity_queue.push(entities::EntityType::Ball { x: 25.0, y: 75.0 });
+        entity_queue.push(entities::EntityType::Ball { x: -15.0, y: 90.0 });
+        entity_queue.push(entities::EntityType::Ball { x: -130.0, y: 20.0 });
         entity_queue.push(entities::EntityType::Bar);
     }
 

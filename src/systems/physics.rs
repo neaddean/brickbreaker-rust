@@ -1,6 +1,7 @@
-use specs::{Entities, join::Join, ReadStorage, System, WriteStorage, Write};
+use specs::{Entities, join::Join, ReadStorage, System, Write, WriteStorage};
 
 use crate::components::*;
+use crate::constants::SIMULATION_DURATION;
 use crate::resources;
 
 pub struct PhysicsSystem;
@@ -36,8 +37,8 @@ impl<'a> System<'a> for PhysicsSystem {
             // move bar and check if it's at the edge of screen
             for (position, velocity, bar) in
             (&mut positions, &mut velocities, &bars).join() {
-                position.x += velocity.x;
-                position.y += velocity.y;
+                position.x += velocity.x * SIMULATION_DURATION;
+                position.y += velocity.y * SIMULATION_DURATION;
 
                 if position.x < bar.width / 2.0 {
                     position.x = bar.width / 2.0;
@@ -55,8 +56,8 @@ impl<'a> System<'a> for PhysicsSystem {
             // move balls and if they are colliding with anything, reverse velocity
             for (entity, position, velocity, ball) in
             (&entities, &mut positions, &mut velocities, &balls).join() {
-                position.x += velocity.x;
-                position.y += velocity.y;
+                position.x += velocity.x * SIMULATION_DURATION;
+                position.y += velocity.y * SIMULATION_DURATION;
 
                 if position.x + ball.radius / 2.0 > game_state.screen_size.0 {
                     position.x = game_state.screen_size.0 - ball.radius / 2.0;

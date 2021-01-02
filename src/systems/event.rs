@@ -37,30 +37,30 @@ impl<'a> System<'a> for EventSystem {
                     match (key_code, _is_repeated, _key_mods) {
                         (KeyCode::Up, _, _) => {
                             for (vel, _) in (&mut velocities, &balls).join() {
-                                vel.x += 2.0 * num::signum(vel.x);
-                                vel.y += 2.0 * num::signum(vel.y);
+                                vel.x += 120.0 * num::signum(vel.x);
+                                vel.y += 120.0 * num::signum(vel.y);
                             }
                         }
                         (KeyCode::Down, _, _) => {
                             for (vel, _) in (&mut velocities, &balls).join() {
-                                vel.x -= 2.0 * num::signum(vel.x);
-                                vel.y -= 2.0 * num::signum(vel.y);
+                                vel.x -= 120.0 * num::signum(vel.x);
+                                vel.y -= 120.0 * num::signum(vel.y);
                             }
                         }
                         (KeyCode::Right, false, _) => {
                             for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x = 10.0;
+                                vel.x = 600.0;
                             }
                         }
                         (KeyCode::Left, false, _) => {
                             for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x = -10.0;
+                                vel.x = -600.0;
                             }
                         }
                         (KeyCode::Space, false, _) => {
                             entity_queue.push(EntityType::Ball {
-                                x: thread_rng().gen_range(-2.0..2.0),
-                                y: thread_rng().gen_range(-2.0..2.0),
+                                x: thread_rng().gen_range(-120.0..120.0),
+                                y: thread_rng().gen_range(-120.0..120.0),
                             });
                         }
                         (KeyCode::F, false, KeyMods::CTRL) => {
