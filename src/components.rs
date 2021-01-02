@@ -24,7 +24,7 @@ pub struct Bar {
 pub struct Position {
     pub x: f32,
     pub y: f32,
-    pub z: i32,
+    pub z: u8,
 }
 
 #[derive(Component, Default)]

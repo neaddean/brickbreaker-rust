@@ -20,7 +20,7 @@ impl<'a> System<'a> for EventSystem {
     fn run(&mut self, data: Self::SystemData) {
         let (mut event_queue,
             mut entity_queue,
-            mut positions,
+            _positions,
             mut velocities,
             balls,
             bars,
@@ -45,12 +45,12 @@ impl<'a> System<'a> for EventSystem {
                         }
                         (KeyCode::Right, false) => {
                             for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x = 10.0;
+                                vel.x += 10.0;
                             }
                         }
                         (KeyCode::Left, false) => {
                             for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x = -10.0;
+                                vel.x -= 10.0;
                             }
                         }
                         (KeyCode::Space, false) => {
@@ -64,14 +64,14 @@ impl<'a> System<'a> for EventSystem {
                 }
                 Event::KeyUp(key_code, _key_mods) => {
                     match key_code {
-                        KeyCode::Left => {
-                            for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x = 0.0;
-                            }
-                        }
                         KeyCode::Right => {
                             for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x = 0.0;
+                                vel.x -= 10.0;
+                            }
+                        }
+                        KeyCode::Left => {
+                            for (vel, _) in (&mut velocities, &bars).join() {
+                                vel.x += 10.0;
                             }
                         }
                         _ => {}

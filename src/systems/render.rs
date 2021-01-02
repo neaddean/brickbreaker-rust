@@ -1,5 +1,9 @@
+use std::collections::HashMap;
+
 use ggez::{Context, graphics};
+use ggez::graphics::spritebatch::SpriteBatch;
 use ggez::nalgebra as na;
+use itertools::Itertools;
 use specs::{join::Join, Read, ReadStorage, System};
 
 use crate::components::*;
@@ -40,16 +44,37 @@ impl<'a> System<'a> for RenderingSystem<'a> {
             renderables,
             asset_cache,
         ) = data;
-        let mut rendering_data = (&positions, &renderables).join().collect::<Vec<_>>();
-        rendering_data.sort_by_key(|&k| k.0.z);
+        // let mut rendering_data = (&positions, &renderables).join().collect::<Vec<_>>();
 
-        for (position, renderable) in rendering_data.iter() {
-            let texture = asset_cache.cache.get(&renderable.asset_name).unwrap();
-            let draw_params =
-                graphics::DrawParam::new()
-                    .dest(na::Point2::new(position.x, position.y))
-                    .offset(na::Point2::new(0.0, 0.0));
-            graphics::draw(self.ctx, texture, draw_params).unwrap();
+        let mut rendering_batches: HashMap<u8, HashMap<String, Vec<graphics::DrawParam>>> = HashMap::new();
+
+        // Iterate each of the renderables, determine which image path should be rendered
+        // at which drawparams, and then add that to the rendering_batches.
+        for (position, renderable) in (&positions, &renderables).join() {
+            rendering_batches
+                .entry(position.z)
+                .or_default()
+                .entry(renderable.asset_name.to_string())
+                .or_default()
+                .push(graphics::DrawParam::new()
+                    .dest(na::Point2::new(position.x, position.y)));
+        }
+
+        // Iterate spritebatches ordered by z and actually render each of them
+        for (_z, group) in rendering_batches
+            .iter()
+            .sorted_by(|a, b| Ord::cmp(&a.0, &b.0))
+        {
+            for (image_path, draw_params) in group {
+                let texture = asset_cache.cache.get(image_path).unwrap().clone();
+                let mut sprite_batch = SpriteBatch::new(texture);
+
+                for draw_param in draw_params.iter() {
+                    sprite_batch.add(*draw_param);
+                }
+
+                graphics::draw(self.ctx, &sprite_batch, graphics::DrawParam::new()).unwrap();
+            }
         }
 
         self.draw_text(format!("{:0.2}", ggez::timer::fps(self.ctx)).as_str(), 0.0, 0.0);
