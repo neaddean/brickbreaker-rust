@@ -65,7 +65,9 @@ pub fn run(
 
         {
             let mut game_state = world.write_resource::<GameState>();
-            game_state.do_update = ggez::timer::check_update_time(ctx, SIMULATION_HZ);
+            while ggez::timer::check_update_time(ctx, SIMULATION_HZ) {
+                game_state.pending_updates += 1;
+            }
             if !game_state.continuing {
                 break;
             }

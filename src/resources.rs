@@ -9,7 +9,7 @@ pub type EntityQueue = Vec<crate::entities::EntityType>;
 
 #[derive(Default)]
 pub struct GameState {
-    pub do_update: bool,
+    pub pending_updates: u8,
     pub show_fps: bool,
     pub continuing: bool,
     pub screen_size: (f32, f32),
