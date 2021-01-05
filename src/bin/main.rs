@@ -32,7 +32,7 @@ fn main() {
         .with(EntityCreatorSystem, "entites", &["events"])
         .with(PhysicsSystem::default(), "physics", &["entites"])
         .with_thread_local(InputSystem { ctx: Rc::clone(&ctx), event_loop })
-        .with_thread_local(RenderingSystem { ctx: Rc::clone(&ctx), accum: 0.0 })
+        .with_thread_local(RenderingSystem::new(Rc::clone(&ctx)))
         .build();
 
     dispatcher.setup(world);

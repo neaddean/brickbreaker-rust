@@ -2,19 +2,33 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+use specs::prelude::*;
+
 use ggez::{Context, graphics};
 use ggez::graphics::spritebatch::SpriteBatch;
 use ggez::nalgebra as na;
 use itertools::Itertools;
-use specs::{join::Join, Read, ReadExpect, ReadStorage, System};
+use specs::{join::Join, Read, ReadExpect, ReadStorage, System, World, WorldExt};
 
 use crate::components::*;
 use crate::constants::SW_FRAME_RATE_DURATION;
 use crate::resources;
 
 pub struct RenderingSystem<'a> {
-    pub ctx: Rc<RefCell<&'a mut Context>>,
-    pub accum: f32,
+    ctx: Rc<RefCell<&'a mut Context>>,
+    accum: f32,
+    imgui_wrapper: Option<f32>,
+}
+
+impl<'a> RenderingSystem<'a> {
+    pub fn new(ctx: Rc<RefCell<&'a mut Context>>) -> Self {
+
+        RenderingSystem {
+            ctx,
+            accum: 0.0,
+            imgui_wrapper: None,
+        }
+    }
 }
 
 impl RenderingSystem<'_> {
@@ -42,9 +56,9 @@ impl<'a> System<'a> for RenderingSystem<'_> {
         if game_state.sw_frame_limiter {
             self.accum += game_state.this_duration().as_secs_f32();
         } else {
-            self.accum = SW_FRAME_RATE_DURATION * 1.001;
+            self.accum = SW_FRAME_RATE_DURATION;
         }
-        while self.accum > SW_FRAME_RATE_DURATION {
+        while self.accum >= SW_FRAME_RATE_DURATION {
             self.accum -= SW_FRAME_RATE_DURATION;
 
             self.ctx.borrow_mut().timer_context.tick();
@@ -104,5 +118,10 @@ impl<'a> System<'a> for RenderingSystem<'_> {
                 .expect("expected drawing queued text");
             graphics::present(*self.ctx.borrow_mut()).unwrap();
         }
+    }
+
+    fn setup(&mut self, world: &mut World) {
+        Self::SystemData::setup(world);
+        println!("setup!")
     }
 }
