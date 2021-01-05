@@ -3,16 +3,30 @@ use std::rc::Rc;
 
 use ggez::Context;
 use ggez::event::winit_event::*;
-use ggez::input::keyboard;
+use ggez::input::{keyboard, mouse};
 use specs::{System, Write};
-use winit::EventsLoop;
+use winit::{dpi, EventsLoop};
 
 use crate::events::Event::{CloseGame, KeyDown, KeyUp};
-use crate::resources::{EventQueue};
+use crate::ImGuiWrapper;
+use crate::resources::EventQueue;
 
 pub struct InputSystem<'a> {
-    pub ctx: Rc<RefCell<&'a mut Context>>,
-    pub event_loop: &'a mut EventsLoop,
+    ctx: Rc<RefCell<&'a mut Context>>,
+    imgui_wrapper: Rc<RefCell<&'a mut ImGuiWrapper>>,
+    event_loop: &'a mut EventsLoop,
+}
+
+impl<'a> InputSystem<'a> {
+    pub fn new(ctx: Rc<RefCell<&'a mut Context>>,
+               imgui_wrapper: Rc<RefCell<&'a mut ImGuiWrapper>>,
+               event_loop: &'a mut EventsLoop) -> Self {
+        InputSystem {
+            ctx,
+            imgui_wrapper,
+            event_loop,
+        }
+    }
 }
 
 impl<'a> System<'a> for InputSystem<'_> {
@@ -21,6 +35,7 @@ impl<'a> System<'a> for InputSystem<'_> {
     fn run(&mut self, data: Self::SystemData) {
         let mut event_queue = data;
         let ref mut ctx = self.ctx.borrow_mut();
+        let ref mut imgui_wrapper = self.imgui_wrapper.borrow_mut();
 
         self.event_loop.poll_events(|event| {
             ctx.process_event(&event);
@@ -39,8 +54,10 @@ impl<'a> System<'a> for InputSystem<'_> {
                         },
                         ..
                     } => {
+                        let keymods = modifiers.into();
                         let repeat = keyboard::is_key_repeated(ctx);
-                        event_queue.events.push(KeyDown(keycode, modifiers.into(), repeat))
+                        event_queue.events.push(KeyDown(keycode, keymods, repeat));
+                        imgui_wrapper.update_key_down(keycode, keymods);
                     }
                     WindowEvent::KeyboardInput {
                         input: KeyboardInput {
@@ -51,11 +68,49 @@ impl<'a> System<'a> for InputSystem<'_> {
                         },
                         ..
                     } => {
-                        event_queue.events.push(KeyUp(keycode, modifiers.into()))
+                        let keymods = modifiers.into();
+                        event_queue.events.push(KeyUp(keycode, keymods));
+                        imgui_wrapper.update_key_up(keycode, keymods);
                     }
-                    _ => {}
+                    WindowEvent::Resized(logical_size) => {
+                    }
+                    WindowEvent::MouseWheel { delta, .. } => {
+                        let (x, y) = match delta {
+                            MouseScrollDelta::LineDelta(x, y) => (x, y),
+                            MouseScrollDelta::PixelDelta(dpi::LogicalPosition { x, y }) => {
+                                (x as f32, y as f32)
+                            }
+                        };
+                    }
+                    WindowEvent::MouseInput {
+                        state: element_state,
+                        button,
+                        ..
+                    } => {
+                        let position = mouse::position(ctx);
+                        match element_state {
+                            ElementState::Pressed => {
+                                // state.mouse_button_down_event(ctx, button, position.x, position.y)
+                            }
+                            ElementState::Released => {
+                                // state.mouse_button_up_event(ctx, button, position.x, position.y)
+                            }
+                        }
+                    }
+                    WindowEvent::CursorMoved { .. } => {
+                        let position = mouse::position(ctx);
+                        let delta = mouse::delta(ctx);
+                        // state.mouse_motion_event(ctx, position.x, position.y, delta.x, delta.y);
+                    }
+                    _x => {
+                    // trace!("ignoring window event {:?}", _x);
+                    }
                 },
-                _ => {}
+                Event::DeviceEvent { event, .. } => match event {
+                    _ => (),
+                },
+                Event::Awakened => (),
+                Event::Suspended(_) => (),
             }
         });
     }

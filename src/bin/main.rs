@@ -4,7 +4,7 @@ use std::rc::Rc;
 use ggez::ContextBuilder;
 use specs::{DispatcherBuilder, World, WorldExt};
 
-use bricktest::{entities, systems::{EntityCreatorSystem, EventSystem, PhysicsSystem}, ImGuiWrapper};
+use bricktest::{entities, ImGuiWrapper, systems::{EntityCreatorSystem, EventSystem, PhysicsSystem}};
 use bricktest::resources::{AssetCache, EntityQueue, GameState};
 use bricktest::systems::{InputSystem, RenderingSystem};
 
@@ -35,7 +35,7 @@ fn main() {
         .with(EventSystem, "events", &[])
         .with(EntityCreatorSystem, "entites", &["events"])
         .with(PhysicsSystem::default(), "physics", &["entites"])
-        .with_thread_local(InputSystem { ctx: Rc::clone(&ctx), event_loop })
+        .with_thread_local(InputSystem::new(Rc::clone(&ctx), Rc::clone(&imgui_wrapper), event_loop))
         .with_thread_local(RenderingSystem::new(Rc::clone(&ctx), Rc::clone(&imgui_wrapper)))
         .build();
 
@@ -56,5 +56,6 @@ fn main() {
         let mut asset_cache = world.write_resource::<AssetCache>();
         asset_cache.load_assets(*ctx.borrow_mut());
     }
+
     bricktest::gameloop::run(dispatcher, world);
 }
