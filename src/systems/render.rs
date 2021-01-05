@@ -6,7 +6,7 @@ use ggez::{Context, graphics};
 use ggez::graphics::spritebatch::SpriteBatch;
 use ggez::nalgebra as na;
 use itertools::Itertools;
-use specs::{join::Join, Read, ReadExpect, ReadStorage, System};
+use specs::{join::Join, Read, ReadStorage, System, WriteExpect};
 
 use crate::{ImGuiWrapper, resources};
 use crate::components::*;
@@ -41,13 +41,13 @@ impl<'a> System<'a> for RenderingSystem<'_> {
     type SystemData = (ReadStorage<'a, Position>,
                        ReadStorage<'a, Renderable>,
                        Read<'a, resources::AssetCache>,
-                       ReadExpect<'a, resources::GameState>);
+                       WriteExpect<'a, resources::GameState>);
 
     fn run(&mut self, data: Self::SystemData) {
         let (positions,
             renderables,
             asset_cache,
-            game_state,
+            mut game_state,
         ) = data;
 
         if game_state.sw_frame_limiter {
@@ -113,6 +113,8 @@ impl<'a> System<'a> for RenderingSystem<'_> {
                 graphics::FilterMode::Linear,
             )
                 .expect("expected drawing queued text");
+
+            self.imgui_wrapper.borrow_mut().render(*self.ctx.borrow_mut(), &mut game_state);
             graphics::present(*self.ctx.borrow_mut()).unwrap();
         }
     }
