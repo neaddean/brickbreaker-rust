@@ -50,31 +50,31 @@ impl ImGuiWrapper {
 
         // Renderer
         let renderer = Renderer::init(&mut imgui, &mut *factory, shaders).unwrap();
-        {
-            let io = imgui.io_mut();
-            io[Key::Tab] = KeyCode::Tab as _;
-            io[Key::LeftArrow] = KeyCode::Left as _;
-            io[Key::RightArrow] = KeyCode::Right as _;
-            io[Key::UpArrow] = KeyCode::Up as _;
-            io[Key::DownArrow] = KeyCode::Down as _;
-            io[Key::PageUp] = KeyCode::PageUp as _;
-            io[Key::PageDown] = KeyCode::PageDown as _;
-            io[Key::Home] = KeyCode::Home as _;
-            io[Key::End] = KeyCode::End as _;
-            io[Key::Insert] = KeyCode::Insert as _;
-            io[Key::Delete] = KeyCode::Delete as _;
-            io[Key::Backspace] = KeyCode::Back as _;
-            io[Key::Space] = KeyCode::Space as _;
-            io[Key::Enter] = KeyCode::Return as _;
-            io[Key::Escape] = KeyCode::Escape as _;
-            io[Key::KeyPadEnter] = KeyCode::NumpadEnter as _;
-            io[Key::A] = KeyCode::A as _;
-            io[Key::C] = KeyCode::C as _;
-            io[Key::V] = KeyCode::V as _;
-            io[Key::X] = KeyCode::X as _;
-            io[Key::Y] = KeyCode::Y as _;
-            io[Key::Z] = KeyCode::Z as _;
-        }
+        // {
+        //     let io = imgui.io_mut();
+        //     io[Key::Tab] = KeyCode::Tab as _;
+        //     io[Key::LeftArrow] = KeyCode::Left as _;
+        //     io[Key::RightArrow] = KeyCode::Right as _;
+        //     io[Key::UpArrow] = KeyCode::Up as _;
+        //     io[Key::DownArrow] = KeyCode::Down as _;
+        //     io[Key::PageUp] = KeyCode::PageUp as _;
+        //     io[Key::PageDown] = KeyCode::PageDown as _;
+        //     io[Key::Home] = KeyCode::Home as _;
+        //     io[Key::End] = KeyCode::End as _;
+        //     io[Key::Insert] = KeyCode::Insert as _;
+        //     io[Key::Delete] = KeyCode::Delete as _;
+        //     io[Key::Backspace] = KeyCode::Back as _;
+        //     io[Key::Space] = KeyCode::Space as _;
+        //     io[Key::Enter] = KeyCode::Return as _;
+        //     io[Key::Escape] = KeyCode::Escape as _;
+        //     io[Key::KeyPadEnter] = KeyCode::NumpadEnter as _;
+        //     io[Key::A] = KeyCode::A as _;
+        //     io[Key::C] = KeyCode::C as _;
+        //     io[Key::V] = KeyCode::V as _;
+        //     io[Key::X] = KeyCode::X as _;
+        //     io[Key::Y] = KeyCode::Y as _;
+        //     io[Key::Z] = KeyCode::Z as _;
+        // }
 
         // Create instance
         Self {
