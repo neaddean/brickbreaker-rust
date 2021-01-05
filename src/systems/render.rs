@@ -2,31 +2,28 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-use specs::prelude::*;
-
 use ggez::{Context, graphics};
 use ggez::graphics::spritebatch::SpriteBatch;
 use ggez::nalgebra as na;
 use itertools::Itertools;
-use specs::{join::Join, Read, ReadExpect, ReadStorage, System, World, WorldExt};
+use specs::{join::Join, Read, ReadExpect, ReadStorage, System};
 
+use crate::{ImGuiWrapper, resources};
 use crate::components::*;
 use crate::constants::SW_FRAME_RATE_DURATION;
-use crate::resources;
 
 pub struct RenderingSystem<'a> {
     ctx: Rc<RefCell<&'a mut Context>>,
     accum: f32,
-    imgui_wrapper: Option<f32>,
+    imgui_wrapper: Rc<RefCell<&'a mut ImGuiWrapper>>,
 }
 
 impl<'a> RenderingSystem<'a> {
-    pub fn new(ctx: Rc<RefCell<&'a mut Context>>) -> Self {
-
+    pub fn new(ctx: Rc<RefCell<&'a mut Context>>, imgui_wrapper: Rc<RefCell<&'a mut ImGuiWrapper>>) -> Self {
         RenderingSystem {
             ctx,
+            imgui_wrapper,
             accum: 0.0,
-            imgui_wrapper: None,
         }
     }
 }
@@ -118,10 +115,5 @@ impl<'a> System<'a> for RenderingSystem<'_> {
                 .expect("expected drawing queued text");
             graphics::present(*self.ctx.borrow_mut()).unwrap();
         }
-    }
-
-    fn setup(&mut self, world: &mut World) {
-        Self::SystemData::setup(world);
-        println!("setup!")
     }
 }

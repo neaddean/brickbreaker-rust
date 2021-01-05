@@ -8,4 +8,6 @@ pub mod gameloop;
 pub mod systems;
 pub mod resources;
 mod events;
-// pub mod ImGuiWrapper;
+mod imgui_wrapper;
+
+pub use imgui_wrapper::ImGuiWrapper;

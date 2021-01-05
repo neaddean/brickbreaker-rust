@@ -1,5 +1,3 @@
-use std::time::Instant;
-
 use gfx_core::{handle::RenderTargetView, memory::Typed};
 use gfx_device_gl;
 use ggez::Context;
@@ -86,17 +84,17 @@ impl ImGuiWrapper {
         }
     }
 
-    pub fn render(&mut self, ctx: &mut Context, delta_time: f32, game_state: &mut GameState) {
+    pub fn render(&mut self, ctx: &mut Context, game_state: &mut GameState) {
         // Update mouse
         self.update_mouse();
 
         let (draw_width, draw_height) = graphics::drawable_size(ctx);
         self.imgui.io_mut().display_size = [draw_width, draw_height];
         self.imgui.io_mut().display_framebuffer_scale = [self.hidpi_factor, self.hidpi_factor];
-        self.imgui.io_mut().delta_time = delta_time;
+        self.imgui.io_mut().delta_time = game_state.this_duration().as_secs_f32();
 
         let ui = self.imgui.frame();
-        // let mut show = true;
+        let mut show = true;
 
         // Various ui things
         {
@@ -108,7 +106,7 @@ impl ImGuiWrapper {
                     // Your window stuff here!
                     ui.text(im_str!("Hi from this label!"));
                 });
-            // ui.show_demo_window(&mut show);
+            ui.show_demo_window(&mut show);
         }
 
         // Render

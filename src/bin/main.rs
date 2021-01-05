@@ -4,7 +4,7 @@ use std::rc::Rc;
 use ggez::ContextBuilder;
 use specs::{DispatcherBuilder, World, WorldExt};
 
-use bricktest::{entities, systems::{EntityCreatorSystem, EventSystem, PhysicsSystem}};
+use bricktest::{entities, systems::{EntityCreatorSystem, EventSystem, PhysicsSystem}, ImGuiWrapper};
 use bricktest::resources::{AssetCache, EntityQueue, GameState};
 use bricktest::systems::{InputSystem, RenderingSystem};
 
@@ -24,6 +24,10 @@ fn main() {
 
     let ctx = Rc::new(RefCell::new(ctx));
 
+    let hidpi_factor = event_loop.get_primary_monitor().get_hidpi_factor() as f32;
+    let ref mut imgui_wrapper = ImGuiWrapper::new(*ctx.borrow_mut(), hidpi_factor);
+    let imgui_wrapper = Rc::new(RefCell::new(imgui_wrapper));
+
     let ref mut world = World::new();
     world.insert(GameState::new(*ctx.borrow_mut()));
 
@@ -32,7 +36,7 @@ fn main() {
         .with(EntityCreatorSystem, "entites", &["events"])
         .with(PhysicsSystem::default(), "physics", &["entites"])
         .with_thread_local(InputSystem { ctx: Rc::clone(&ctx), event_loop })
-        .with_thread_local(RenderingSystem::new(Rc::clone(&ctx)))
+        .with_thread_local(RenderingSystem::new(Rc::clone(&ctx), Rc::clone(&imgui_wrapper)))
         .build();
 
     dispatcher.setup(world);

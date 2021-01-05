@@ -1,5 +1,5 @@
 pub const SIMULATION_HZ: f32 = 250.0;
 pub const SIMULATION_DURATION: f32 = 1.0 / SIMULATION_HZ;
 
-pub const SW_FRAME_RATE_HZ: f32 = 60.0;
+pub const SW_FRAME_RATE_HZ: f32 = 59.94;
 pub const SW_FRAME_RATE_DURATION: f32 = 1.0 / SW_FRAME_RATE_HZ;
