@@ -1,15 +1,15 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use ggez::Context;
 use ggez::event::winit_event::*;
 use ggez::input::{keyboard, mouse};
+use ggez::Context;
 use specs::{System, Write};
 use winit::{dpi, EventsLoop};
 
 use crate::events::Event::{CloseGame, KeyDown, KeyUp};
-use crate::ImGuiWrapper;
 use crate::resources::EventQueue;
+use crate::ImGuiWrapper;
 
 pub struct InputSystem<'a> {
     ctx: Rc<RefCell<&'a mut Context>>,
@@ -18,9 +18,11 @@ pub struct InputSystem<'a> {
 }
 
 impl<'a> InputSystem<'a> {
-    pub fn new(ctx: Rc<RefCell<&'a mut Context>>,
-               imgui_wrapper: Rc<RefCell<&'a mut ImGuiWrapper>>,
-               event_loop: &'a mut EventsLoop) -> Self {
+    pub fn new(
+        ctx: Rc<RefCell<&'a mut Context>>,
+        imgui_wrapper: Rc<RefCell<&'a mut ImGuiWrapper>>,
+        event_loop: &'a mut EventsLoop,
+    ) -> Self {
         InputSystem {
             ctx,
             imgui_wrapper,
@@ -44,16 +46,15 @@ impl<'a> System<'a> for InputSystem<'_> {
                     WindowEvent::ReceivedCharacter(ch) => {
                         imgui_wrapper.update_text(ch);
                     }
-                    WindowEvent::CloseRequested => {
-                        event_queue.events.push(CloseGame)
-                    }
+                    WindowEvent::CloseRequested => event_queue.events.push(CloseGame),
                     WindowEvent::KeyboardInput {
-                        input: KeyboardInput {
-                            state: ElementState::Pressed,
-                            virtual_keycode: Some(keycode),
-                            modifiers,
-                            ..
-                        },
+                        input:
+                            KeyboardInput {
+                                state: ElementState::Pressed,
+                                virtual_keycode: Some(keycode),
+                                modifiers,
+                                ..
+                            },
                         ..
                     } => {
                         let keymods = modifiers.into();
@@ -62,12 +63,13 @@ impl<'a> System<'a> for InputSystem<'_> {
                         imgui_wrapper.update_key_down(keycode, keymods);
                     }
                     WindowEvent::KeyboardInput {
-                        input: KeyboardInput {
-                            state: ElementState::Released,
-                            virtual_keycode: Some(keycode),
-                            modifiers,
-                            ..
-                        },
+                        input:
+                            KeyboardInput {
+                                state: ElementState::Released,
+                                virtual_keycode: Some(keycode),
+                                modifiers,
+                                ..
+                            },
                         ..
                     } => {
                         let keymods = modifiers.into();
@@ -88,16 +90,14 @@ impl<'a> System<'a> for InputSystem<'_> {
                         state: element_state,
                         button,
                         ..
-                    } => {
-                        match element_state {
-                            ElementState::Pressed => {
-                                imgui_wrapper.update_mouse_down(button);
-                            }
-                            ElementState::Released => {
-                                imgui_wrapper.update_mouse_up(button);
-                            }
+                    } => match element_state {
+                        ElementState::Pressed => {
+                            imgui_wrapper.update_mouse_down(button);
                         }
-                    }
+                        ElementState::Released => {
+                            imgui_wrapper.update_mouse_up(button);
+                        }
+                    },
                     WindowEvent::CursorMoved { .. } => {
                         let position = mouse::position(ctx);
                         let _delta = mouse::delta(ctx);

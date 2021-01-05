@@ -4,10 +4,10 @@ mod constants;
 
 pub mod components;
 pub mod entities;
-pub mod gameloop;
-pub mod systems;
-pub mod resources;
 mod events;
+pub mod gameloop;
 mod imgui_wrapper;
+pub mod resources;
+pub mod systems;
 
 pub use imgui_wrapper::ImGuiWrapper;

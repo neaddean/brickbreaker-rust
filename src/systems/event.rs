@@ -1,27 +1,33 @@
 use ggez::input::keyboard::{KeyCode, KeyMods};
-use rand::{Rng, thread_rng};
+use rand::{thread_rng, Rng};
 use specs::{join::Join, ReadStorage, System, Write, WriteExpect, WriteStorage};
 
-use crate::{components::*, events::Event, resources::{EntityQueue, EventQueue}};
 use crate::entities::EntityType;
 use crate::resources::GameState;
+use crate::{
+    components::*,
+    events::Event,
+    resources::{EntityQueue, EventQueue},
+};
 
 pub struct EventSystem;
 
 // System implementation
 impl<'a> System<'a> for EventSystem {
     // Data
-    type SystemData = (Write<'a, EventQueue>,
-                       Write<'a, EntityQueue>,
-                       WriteStorage<'a, Position>,
-                       WriteStorage<'a, Velocity>,
-                       ReadStorage<'a, Ball>,
-                       ReadStorage<'a, Bar>,
-                       WriteExpect<'a, GameState>
+    type SystemData = (
+        Write<'a, EventQueue>,
+        Write<'a, EntityQueue>,
+        WriteStorage<'a, Position>,
+        WriteStorage<'a, Velocity>,
+        ReadStorage<'a, Ball>,
+        ReadStorage<'a, Bar>,
+        WriteExpect<'a, GameState>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (mut event_queue,
+        let (
+            mut event_queue,
             mut entity_queue,
             _positions,
             mut velocities,
@@ -85,21 +91,19 @@ impl<'a> System<'a> for EventSystem {
                         _ => {}
                     }
                 }
-                Event::KeyUp(key_code, _key_mods) => {
-                    match key_code {
-                        KeyCode::Right => {
-                            for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x = 0.0;
-                            }
+                Event::KeyUp(key_code, _key_mods) => match key_code {
+                    KeyCode::Right => {
+                        for (vel, _) in (&mut velocities, &bars).join() {
+                            vel.x = 0.0;
                         }
-                        KeyCode::Left => {
-                            for (vel, _) in (&mut velocities, &bars).join() {
-                                vel.x = 0.0;
-                            }
-                        }
-                        _ => {}
                     }
-                }
+                    KeyCode::Left => {
+                        for (vel, _) in (&mut velocities, &bars).join() {
+                            vel.x = 0.0;
+                        }
+                    }
+                    _ => {}
+                },
                 Event::CloseGame => {
                     game_state.continuing = false;
                 }

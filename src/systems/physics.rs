@@ -1,5 +1,5 @@
 use num::traits::Pow;
-use specs::{Entities, join::Join, ReadExpect, ReadStorage, System, WriteStorage};
+use specs::{join::Join, Entities, ReadExpect, ReadStorage, System, WriteStorage};
 
 use crate::components::*;
 use crate::constants::SIMULATION_DURATION;
@@ -7,7 +7,7 @@ use crate::resources;
 
 #[derive(Default)]
 pub struct PhysicsSystem {
-    accum: f32
+    accum: f32,
 }
 
 struct BarDescriptor {
@@ -18,23 +18,18 @@ struct BarDescriptor {
 }
 
 impl<'a> System<'a> for PhysicsSystem {
-    type SystemData = (WriteStorage<'a, Position>,
-                       WriteStorage<'a, Velocity>,
-                       ReadStorage<'a, Ball>,
-                       ReadStorage<'a, Bar>,
-                       WriteStorage<'a, Brick>,
-                       ReadExpect<'a, resources::GameState>,
-                       Entities<'a>);
+    type SystemData = (
+        WriteStorage<'a, Position>,
+        WriteStorage<'a, Velocity>,
+        ReadStorage<'a, Ball>,
+        ReadStorage<'a, Bar>,
+        WriteStorage<'a, Brick>,
+        ReadExpect<'a, resources::GameState>,
+        Entities<'a>,
+    );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (mut positions,
-            mut velocities,
-            balls,
-            bars,
-            mut bricks,
-            game_state,
-            entities
-        ) = data;
+        let (mut positions, mut velocities, balls, bars, mut bricks, game_state, entities) = data;
 
         self.accum += game_state.this_duration().as_secs_f32();
         while self.accum > SIMULATION_DURATION {
@@ -42,8 +37,7 @@ impl<'a> System<'a> for PhysicsSystem {
             let mut bar_desc: Vec<BarDescriptor> = Vec::new();
 
             // move bar and check if it's at the edge of screen
-            for (position, velocity, bar) in
-            (&mut positions, &mut velocities, &bars).join() {
+            for (position, velocity, bar) in (&mut positions, &mut velocities, &bars).join() {
                 position.x += velocity.x * SIMULATION_DURATION;
                 position.y += velocity.y * SIMULATION_DURATION;
 
@@ -62,7 +56,8 @@ impl<'a> System<'a> for PhysicsSystem {
 
             // move balls and if they are colliding with anything, reverse velocity
             for (entity, position, velocity, ball) in
-            (&entities, &mut positions, &mut velocities, &balls).join() {
+                (&entities, &mut positions, &mut velocities, &balls).join()
+            {
                 position.x += velocity.x * SIMULATION_DURATION;
                 position.y += velocity.y * SIMULATION_DURATION;
 
@@ -82,9 +77,9 @@ impl<'a> System<'a> for PhysicsSystem {
                 }
 
                 for bar in &bar_desc {
-                    if (position.y + ball.radius / 2.0 > bar.y - bar.height / 2.0) &
-                        (position.x < bar.x + bar.width / 2.0) &
-                        (position.x > bar.x - bar.width / 2.0)
+                    if (position.y + ball.radius / 2.0 > bar.y - bar.height / 2.0)
+                        & (position.x < bar.x + bar.width / 2.0)
+                        & (position.x > bar.x - bar.width / 2.0)
                     {
                         velocity.y *= -1.0;
                         position.y = bar.y - bar.height / 2.0 - ball.radius / 2.0;
@@ -103,9 +98,7 @@ impl<'a> System<'a> for PhysicsSystem {
                         x if x > brick_pos.x + brick.width / 2.0 => {
                             (Some(BrickCollision), brick_pos.x + brick.width / 2.0)
                         }
-                        x => {
-                            (None, x)
-                        }
+                        x => (None, x),
                     };
 
                     let (y_side, y_center) = match ball_pos.y {
@@ -115,12 +108,13 @@ impl<'a> System<'a> for PhysicsSystem {
                         y if y > brick_pos.y + brick.height / 2.0 => {
                             (Some(BrickCollision), brick_pos.y + brick.height / 2.0)
                         }
-                        y => {
-                            (None, y)
-                        }
+                        y => (None, y),
                     };
 
-                    if <f32>::sqrt((ball_pos.x - x_center).pow(2.0) + (ball_pos.y - y_center).pow(2.0)) < ball.radius {
+                    if <f32>::sqrt(
+                        (ball_pos.x - x_center).pow(2.0) + (ball_pos.y - y_center).pow(2.0),
+                    ) < ball.radius
+                    {
                         brick.health = brick.health.checked_sub(1).unwrap_or(0);
                         if brick.health <= 0 {
                             entities.delete(brick_entity).unwrap();

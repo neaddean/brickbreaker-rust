@@ -6,7 +6,6 @@ pub struct Renderable {
     pub asset_name: String,
 }
 
-
 #[derive(Component)]
 #[storage(VecStorage)]
 pub struct Ball {

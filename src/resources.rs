@@ -55,10 +55,13 @@ impl AssetCache {
     pub fn load_assets(&mut self, ctx: &mut ggez::Context) {
         for path in ggez::filesystem::read_dir(ctx, "/")
             .unwrap()
-            .filter(|p| p.to_str().unwrap().ends_with(".png")) {
+            .filter(|p| p.to_str().unwrap().ends_with(".png"))
+        {
             println!("Loading asset: {}", path.to_str().unwrap());
-            self.cache.insert(String::from(path.to_str().unwrap()),
-                              ggez::graphics::Image::new(ctx, path).unwrap());
+            self.cache.insert(
+                String::from(path.to_str().unwrap()),
+                ggez::graphics::Image::new(ctx, path).unwrap(),
+            );
         }
     }
 }

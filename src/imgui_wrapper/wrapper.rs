@@ -1,8 +1,8 @@
 use gfx_core::{handle::RenderTargetView, memory::Typed};
 use gfx_device_gl;
-use ggez::Context;
 use ggez::event::{KeyCode, KeyMods, MouseButton};
 use ggez::graphics;
+use ggez::Context;
 use imgui::*;
 use imgui_gfx_renderer::*;
 
@@ -112,8 +112,7 @@ impl ImGuiWrapper {
         // Render
         let (factory, _, encoder, _, render_target) = graphics::gfx_objects(ctx);
         let draw_data = ui.render();
-        self
-            .renderer
+        self.renderer
             .render(
                 &mut *factory,
                 encoder,
@@ -124,7 +123,8 @@ impl ImGuiWrapper {
     }
 
     fn update_mouse(&mut self) {
-        self.imgui.io_mut().mouse_pos = [self.mouse_state.pos.0 as f32, self.mouse_state.pos.1 as f32];
+        self.imgui.io_mut().mouse_pos =
+            [self.mouse_state.pos.0 as f32, self.mouse_state.pos.1 as f32];
 
         self.imgui.io_mut().mouse_down = [
             self.mouse_state.pressed.0,
@@ -150,7 +150,7 @@ impl ImGuiWrapper {
             MouseButton::Left => self.mouse_state.pressed.0 = true,
             MouseButton::Right => self.mouse_state.pressed.1 = true,
             MouseButton::Middle => self.mouse_state.pressed.2 = true,
-            _ => ()
+            _ => (),
         }
     }
 
@@ -159,7 +159,7 @@ impl ImGuiWrapper {
             MouseButton::Left => self.mouse_state.pressed.0 = false,
             MouseButton::Right => self.mouse_state.pressed.1 = false,
             MouseButton::Middle => self.mouse_state.pressed.2 = false,
-            _ => ()
+            _ => (),
         }
     }
 

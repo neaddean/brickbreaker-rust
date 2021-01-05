@@ -2,15 +2,15 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-use ggez::{Context, graphics};
 use ggez::graphics::spritebatch::SpriteBatch;
 use ggez::nalgebra as na;
+use ggez::{graphics, Context};
 use itertools::Itertools;
 use specs::{join::Join, Read, ReadStorage, System, WriteExpect};
 
-use crate::{ImGuiWrapper, resources};
 use crate::components::*;
 use crate::constants::SW_FRAME_RATE_DURATION;
+use crate::{resources, ImGuiWrapper};
 
 pub struct RenderingSystem<'a> {
     ctx: Rc<RefCell<&'a mut Context>>,
@@ -19,7 +19,10 @@ pub struct RenderingSystem<'a> {
 }
 
 impl<'a> RenderingSystem<'a> {
-    pub fn new(ctx: Rc<RefCell<&'a mut Context>>, imgui_wrapper: Rc<RefCell<&'a mut ImGuiWrapper>>) -> Self {
+    pub fn new(
+        ctx: Rc<RefCell<&'a mut Context>>,
+        imgui_wrapper: Rc<RefCell<&'a mut ImGuiWrapper>>,
+    ) -> Self {
         RenderingSystem {
             ctx,
             imgui_wrapper,
@@ -38,17 +41,15 @@ impl RenderingSystem<'_> {
 }
 
 impl<'a> System<'a> for RenderingSystem<'_> {
-    type SystemData = (ReadStorage<'a, Position>,
-                       ReadStorage<'a, Renderable>,
-                       Read<'a, resources::AssetCache>,
-                       WriteExpect<'a, resources::GameState>);
+    type SystemData = (
+        ReadStorage<'a, Position>,
+        ReadStorage<'a, Renderable>,
+        Read<'a, resources::AssetCache>,
+        WriteExpect<'a, resources::GameState>,
+    );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (positions,
-            renderables,
-            asset_cache,
-            mut game_state,
-        ) = data;
+        let (positions, renderables, asset_cache, mut game_state) = data;
 
         if game_state.sw_frame_limiter {
             self.accum += game_state.this_duration().as_secs_f32();
@@ -60,9 +61,13 @@ impl<'a> System<'a> for RenderingSystem<'_> {
 
             self.ctx.borrow_mut().timer_context.tick();
 
-            graphics::clear(*self.ctx.borrow_mut(), graphics::Color::new(0.0, 0.0, 0.0, 1.0));
+            graphics::clear(
+                *self.ctx.borrow_mut(),
+                graphics::Color::new(0.0, 0.0, 0.0, 1.0),
+            );
 
-            let mut rendering_batches: HashMap<u8, HashMap<String, Vec<graphics::DrawParam>>> = HashMap::new();
+            let mut rendering_batches: HashMap<u8, HashMap<String, Vec<graphics::DrawParam>>> =
+                HashMap::new();
 
             for (position, renderable) in (&positions, &renderables).join() {
                 rendering_batches
@@ -70,9 +75,11 @@ impl<'a> System<'a> for RenderingSystem<'_> {
                     .or_default()
                     .entry(renderable.asset_name.to_string())
                     .or_default()
-                    .push(graphics::DrawParam::new()
-                        .dest(na::Point2::new(position.x, position.y))
-                        .offset(na::Point2::new(0.5, 0.5)));
+                    .push(
+                        graphics::DrawParam::new()
+                            .dest(na::Point2::new(position.x, position.y))
+                            .offset(na::Point2::new(0.5, 0.5)),
+                    );
             }
 
             // Iterate spritebatches ordered by z and actually render each of them
@@ -88,14 +95,22 @@ impl<'a> System<'a> for RenderingSystem<'_> {
                         sprite_batch.add(*draw_param);
                     }
 
-                    graphics::draw(*self.ctx.borrow_mut(), &sprite_batch, graphics::DrawParam::new()).unwrap();
+                    graphics::draw(
+                        *self.ctx.borrow_mut(),
+                        &sprite_batch,
+                        graphics::DrawParam::new(),
+                    )
+                    .unwrap();
                 }
             }
             let text_line: f32 = 0.0;
             if game_state.show_fps {
-                self.draw_text(format!("{:0.2}", ggez::timer::fps(*self.ctx.borrow_mut())).as_str(),
-                               text_line + 2.0, 2.0,
-                               graphics::Color::new(0.0, 1.0, 0.0, 1.0));
+                self.draw_text(
+                    format!("{:0.2}", ggez::timer::fps(*self.ctx.borrow_mut())).as_str(),
+                    text_line + 2.0,
+                    2.0,
+                    graphics::Color::new(0.0, 1.0, 0.0, 1.0),
+                );
 
                 // self.draw_text(format!("SW limit: {}",
                 //                        match game_state.sw_frame_limiter {
@@ -109,10 +124,14 @@ impl<'a> System<'a> for RenderingSystem<'_> {
                 *self.ctx.borrow_mut(),
                 graphics::DrawParam::new().dest(na::Point2::new(0.0, 0.0)),
                 None,
-                graphics::FilterMode::Linear).unwrap();
+                graphics::FilterMode::Linear,
+            )
+            .unwrap();
 
             if game_state.show_debug {
-                self.imgui_wrapper.borrow_mut().render(*self.ctx.borrow_mut(), &mut game_state);
+                self.imgui_wrapper
+                    .borrow_mut()
+                    .render(*self.ctx.borrow_mut(), &mut game_state);
             }
 
             graphics::present(*self.ctx.borrow_mut()).unwrap();
