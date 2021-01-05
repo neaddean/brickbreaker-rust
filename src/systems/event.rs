@@ -31,11 +31,14 @@ impl<'a> System<'a> for EventSystem {
         ) = data;
 
         for event in event_queue.events.drain(..) {
-            // println!("New event: {:?}", event);
+            println!("New event: {:?}", event);
             match event {
                 Event::KeyDown(key_code, _key_mods, _is_repeated) => {
                     match (key_code, _is_repeated, _key_mods) {
-                        (KeyCode::Up, _, _) => {
+                        (KeyCode::Tab, false, KeyMods::SHIFT) => {
+                            game_state.show_debug ^= true;
+                        }
+                        (KeyCode::Up, ..) => {
                             for (vel, _) in (&mut velocities, &balls).join() {
                                 vel.x += 120.0 * num::signum(vel.x);
                                 vel.y += 120.0 * num::signum(vel.y);
@@ -76,7 +79,7 @@ impl<'a> System<'a> for EventSystem {
                             entity_queue.push(EntityType::Brick {
                                 x: thread_rng().gen_range(0.0..800.0),
                                 y: thread_rng().gen_range(0.0..600.0),
-                                health: thread_rng().gen_range(0..50)
+                                health: thread_rng().gen_range(0..50),
                             });
                         }
                         _ => {}

@@ -41,7 +41,9 @@ impl<'a> System<'a> for InputSystem<'_> {
             ctx.process_event(&event);
             match event {
                 Event::WindowEvent { event, .. } => match event {
-                    WindowEvent::ReceivedCharacter(_ch) => {}
+                    WindowEvent::ReceivedCharacter(ch) => {
+                        imgui_wrapper.update_text(ch);
+                    }
                     WindowEvent::CloseRequested => {
                         event_queue.events.push(CloseGame)
                     }
@@ -72,8 +74,7 @@ impl<'a> System<'a> for InputSystem<'_> {
                         event_queue.events.push(KeyUp(keycode, keymods));
                         imgui_wrapper.update_key_up(keycode, keymods);
                     }
-                    WindowEvent::Resized(logical_size) => {
-                    }
+                    WindowEvent::Resized(..) => {}
                     WindowEvent::MouseWheel { delta, .. } => {
                         let (x, y) = match delta {
                             MouseScrollDelta::LineDelta(x, y) => (x, y),
@@ -81,29 +82,29 @@ impl<'a> System<'a> for InputSystem<'_> {
                                 (x as f32, y as f32)
                             }
                         };
+                        imgui_wrapper.update_scroll(x, y);
                     }
                     WindowEvent::MouseInput {
                         state: element_state,
                         button,
                         ..
                     } => {
-                        let position = mouse::position(ctx);
                         match element_state {
                             ElementState::Pressed => {
-                                // state.mouse_button_down_event(ctx, button, position.x, position.y)
+                                imgui_wrapper.update_mouse_down(button);
                             }
                             ElementState::Released => {
-                                // state.mouse_button_up_event(ctx, button, position.x, position.y)
+                                imgui_wrapper.update_mouse_up(button);
                             }
                         }
                     }
                     WindowEvent::CursorMoved { .. } => {
                         let position = mouse::position(ctx);
-                        let delta = mouse::delta(ctx);
-                        // state.mouse_motion_event(ctx, position.x, position.y, delta.x, delta.y);
+                        let _delta = mouse::delta(ctx);
+                        imgui_wrapper.update_mouse_pos(position.x, position.y);
                     }
                     _x => {
-                    // trace!("ignoring window event {:?}", _x);
+                        // trace!("ignoring window event {:?}", _x);
                     }
                 },
                 Event::DeviceEvent { event, .. } => match event {

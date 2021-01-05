@@ -91,30 +91,30 @@ impl<'a> System<'a> for RenderingSystem<'_> {
                     graphics::draw(*self.ctx.borrow_mut(), &sprite_batch, graphics::DrawParam::new()).unwrap();
                 }
             }
-
-            let mut text_line: f32 = 0.0;
+            let text_line: f32 = 0.0;
             if game_state.show_fps {
-                text_line += self.draw_text(format!("{:0.2}", ggez::timer::fps(*self.ctx.borrow_mut())).as_str(),
-                                            text_line + 2.0, 2.0,
-                                            graphics::Color::new(0.0, 1.0, 0.0, 1.0));
-
-                self.draw_text(format!("SW limit: {}",
-                                       match game_state.sw_frame_limiter {
-                                           true => { "on" }
-                                           false => { "off" }
-                                       }).as_str(),
-                               2.0, text_line + 2.0,
+                self.draw_text(format!("{:0.2}", ggez::timer::fps(*self.ctx.borrow_mut())).as_str(),
+                               text_line + 2.0, 2.0,
                                graphics::Color::new(0.0, 1.0, 0.0, 1.0));
+
+                // self.draw_text(format!("SW limit: {}",
+                //                        match game_state.sw_frame_limiter {
+                //                            true => { "on" }
+                //                            false => { "off" }
+                //                        }).as_str(),
+                //                2.0, text_line + 2.0,
+                //                graphics::Color::new(0.0, 1.0, 0.0, 1.0));
             }
             graphics::draw_queued_text(
                 *self.ctx.borrow_mut(),
                 graphics::DrawParam::new().dest(na::Point2::new(0.0, 0.0)),
                 None,
-                graphics::FilterMode::Linear,
-            )
-                .expect("expected drawing queued text");
+                graphics::FilterMode::Linear).unwrap();
 
-            self.imgui_wrapper.borrow_mut().render(*self.ctx.borrow_mut(), &mut game_state);
+            if game_state.show_debug {
+                self.imgui_wrapper.borrow_mut().render(*self.ctx.borrow_mut(), &mut game_state);
+            }
+
             graphics::present(*self.ctx.borrow_mut()).unwrap();
         }
     }

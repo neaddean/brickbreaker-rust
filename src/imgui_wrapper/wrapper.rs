@@ -5,6 +5,7 @@ use ggez::event::{KeyCode, KeyMods, MouseButton};
 use ggez::graphics;
 use imgui::*;
 use imgui_gfx_renderer::*;
+
 use crate::resources::GameState;
 
 #[derive(Copy, Clone, PartialEq, Debug, Default)]
@@ -48,9 +49,9 @@ impl ImGuiWrapper {
         };
 
         // Renderer
-        let mut renderer = Renderer::init(&mut imgui, &mut *factory, shaders).unwrap();
+        let renderer = Renderer::init(&mut imgui, &mut *factory, shaders).unwrap();
         {
-            let mut io = imgui.io_mut();
+            let io = imgui.io_mut();
             io[Key::Tab] = KeyCode::Tab as _;
             io[Key::LeftArrow] = KeyCode::Left as _;
             io[Key::RightArrow] = KeyCode::Right as _;
@@ -94,7 +95,6 @@ impl ImGuiWrapper {
         self.imgui.io_mut().delta_time = game_state.this_duration().as_secs_f32();
 
         let ui = self.imgui.frame();
-        let mut show = true;
 
         // Various ui things
         {
@@ -106,7 +106,7 @@ impl ImGuiWrapper {
                     // Your window stuff here!
                     ui.text(im_str!("Hi from this label!"));
                 });
-            ui.show_demo_window(&mut show);
+            ui.show_demo_window(&mut game_state.show_debug);
         }
 
         // Render

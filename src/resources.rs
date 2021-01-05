@@ -10,6 +10,7 @@ pub type EntityQueue = Vec<crate::entities::EntityType>;
 
 pub struct GameState {
     pub show_fps: bool,
+    pub show_debug: bool,
     pub continuing: bool,
     pub sw_frame_limiter: bool,
     pub screen_size: (f32, f32),
@@ -24,6 +25,7 @@ impl GameState {
             this_instant: Instant::now(),
             last_instant: Instant::now(),
             show_fps: true,
+            show_debug: true,
             continuing: true,
             sw_frame_limiter: false,
             screen_size: ggez::graphics::drawable_size(&ctx),
